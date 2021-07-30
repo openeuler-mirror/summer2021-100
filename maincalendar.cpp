@@ -1,20 +1,35 @@
 #include "maincalendar.h"
-
 #include <QDebug>
+#include <QMouseEvent>
 
 MainCalendar::MainCalendar(QWidget *parent):
     QWidget(parent)
 {
-    setBgColor(QColor("#F0F8FF"));
-    setTextColor(QColor("#000000"));
-    setShadowColor(QColor("#00FFFF"));
-    setSelectColor(QColor("#00FFFF"));
+    setBgColor(QColor(170, 255, 255, 255));
+    setTextColor(QColor(0, 0, 0, 255));
+    setShadowColor(QColor(0, 255, 255, 255));
+    setSelectColor(QColor(0, 255, 255, 255));
     updateCalendar(this->selectDate);
+
+    for(int i = 0; i < 3 ;i++){
+       for(int j = 0; j < 4;j++){
+            monthSelect[i][j] = i * 4 + j + 1;
+       }
+    }
+
+    //年份更新
+    for(int i = 0;i < 3;i++){
+        for(int j = 0;j < 3;j++){
+            yearSelect[i][j] = this->today.year() + i * 3 + j;
+        }
+    }
+
 }
 
 void MainCalendar::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
+    //设置抗锯齿
     painter.setRenderHints(QPainter::Antialiasing);
 
     int sw = 336;
@@ -26,83 +41,238 @@ void MainCalendar::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::NoPen);
     painter.fillRect(0, 0, sw, sh, bgColor);
 
+    //day_state比例尺
     qreal iw = sw / 7.0;
     qreal ih = sh / 7.0;
+    //month_state比例尺
+    qreal iwm = sw / 4.0;
+    qreal ihm = sw / 3.0;
+    //year_state比例尺
+    qreal iwy = sw / 3.0;
+    qreal ihy = sw / 3.0;
 
     //mask
     QPointF globalpoint = this->mapFromGlobal(QCursor::pos());
     const QPointF &point = QPointF(globalpoint.x() / scaleX, globalpoint.y() / scaleY);
 
     //绘制光晕背景
-    if (this->underMouse()) {
-        int effectradius = 58;
-        painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        QRadialGradient radialGrad(point, effectradius);
-        radialGrad.setColorAt(0, QColor(0, 0, 0, 120));
-        radialGrad.setColorAt(1, QColor(0, 0, 0, 255));
-        painter.setBrush(radialGrad);
-        painter.drawEllipse(point, effectradius, effectradius);
 
-        painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-        painter.setBrush(Qt::NoBrush);
+    switch (this->STATE) {
+        default:
 
-        for (int row = 0; row < 6; row++) {
-            for (int column = 0; column < 7; column++) {
-                QRectF rect = QRectF(column * iw, (row + 1) * ih, iw, ih).adjusted(3, 3, -3, -3);
-                if (rect.contains(point)) {
-                    painter.save();
-                    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-                    painter.setPen(QPen(QColor(220, 220, 220, 160), 2));
-                    painter.drawRoundedRect(rect, 2, 2);
-                    painter.restore();
-                    continue;
-                } else {
-                    painter.setPen(QPen(shadowColor, 2));
+        //选择日期
+        case day_state:{
+
+            //渲染鼠标位置
+            if (this->underMouse()) {
+                int effectradius = 58;
+                painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+                QRadialGradient radialGrad(point, effectradius);
+                radialGrad.setColorAt(0, QColor(0, 0, 0, 120));
+                radialGrad.setColorAt(1, QColor(0, 0, 0, 255));
+                painter.setBrush(radialGrad);
+                painter.drawEllipse(point, effectradius, effectradius);
+
+                painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+                painter.setBrush(Qt::NoBrush);
+
+                for (int row = 0; row < 6; row++) {
+                    for (int column = 0; column < 7; column++) {
+                        QRectF rect = QRectF(column * iw, (row + 1) * ih, iw, ih).adjusted(3, 3, -3, -3);
+                        if (rect.contains(point)) {
+                            painter.save();
+                            painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+                            painter.setPen(QPen(selectColor, 2));
+                            painter.drawRoundedRect(rect, 2, 2);
+                            painter.restore();
+                            continue;
+                        } else {
+                            painter.setPen(QPen(shadowColor, 2));
+                        }
+
+                        painter.drawRoundedRect(rect, 2, 2);
+                    }
                 }
 
-                painter.drawRoundedRect(rect, 2, 2);
+                //绘制圆形的光晕底层背景
+                painter.fillRect(0, 0, sw, sh, bgColor);
             }
+
+
+
+            //绘制头部中文数字,先设置图像叠加模式为源在上面
+            painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            painter.setPen(textColor);
+            QStringList listHead;
+            listHead << "一" << "二" << "三" << "四" << "五" << "六" << "日";
+            for (int i = 0; i < 7; i++) {
+                painter.drawText(i * iw, 0, iw, ih, Qt::AlignCenter, listHead.at(i));
+            }
+
+            //绘制日期
+            for (int row = 0; row < 6; row++) {
+                for (int column = 0; column < 7; column++) {
+                    if (dateItem[row][column].day > 0) {
+                        QRectF rect = QRectF(column * iw, (row + 1) * ih, iw, ih).adjusted(3, 3, -3, -3);
+
+                        //如果是选中的日期则突出绘制背景
+                        if (QDate::currentDate() == QDate(dateItem[row][column].year, dateItem[row][column].month, dateItem[row][column].day)) {
+                            painter.setPen(QPen(selectColor, 2));
+                            painter.setBrush(Qt::NoBrush);
+
+                            //如果和光晕效果重叠则边框高亮
+                            if (rect.contains(point)) {
+                                painter.setPen(QPen(selectColor.lighter(), 2));
+                            }
+
+                            //绘制里边背景
+                            painter.setPen(Qt::NoPen);
+                            painter.setBrush(selectColor);
+                            painter.drawRoundedRect(rect.adjusted(4, 4, -4, -4), 2, 2);
+                        }
+
+                        if (this->selectDate == QDate(dateItem[row][column].year, dateItem[row][column].month, dateItem[row][column].day)) {
+                            painter.setPen(QPen(selectColor, 2));
+                            painter.setBrush(Qt::NoBrush);
+
+                            //如果和光晕效果重叠则边框高亮
+                            if (rect.contains(point)) {
+                                painter.setPen(QPen(selectColor.lighter(), 2));
+                            }
+
+                            //绘制圆角边框
+                            painter.drawRoundedRect(rect, 2, 2);
+
+                        }
+
+                        painter.setPen(textColor);
+                        painter.drawText(rect, Qt::AlignCenter, QString::number(dateItem[row][column].day));
+                    }
+                }
+            }
+            break;
         }
 
-        //绘制圆形的光晕底层背景
-        painter.fillRect(0, 0, sw, sh, QColor(200, 200, 200, 50));
-    }
+        //选择月份
+        case month_state:{
 
-    //绘制头部中文数字,先设置图像叠加模式为源在上面
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.setPen(textColor);
-    QStringList listHead;
-    listHead << "一" << "二" << "三" << "四" << "五" << "六" << "日";
-    for (int i = 0; i < 7; i++) {
-        painter.drawText(i * iw, 0, iw, ih, Qt::AlignCenter, listHead.at(i));
-    }
+            if (this->underMouse()) {
+                int effectradius = 58;
+                painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+                QRadialGradient radialGrad(point, effectradius);
+                radialGrad.setColorAt(0, QColor(0, 0, 0, 120));
+                radialGrad.setColorAt(1, QColor(0, 0, 0, 255));
+                painter.setBrush(radialGrad);
+                painter.drawEllipse(point, effectradius, effectradius);
 
-    //绘制日期
-    for (int row = 0; row < 6; row++) {
-        for (int column = 0; column < 7; column++) {
-            if (dateItem[row][column].day > 0) {
-                QRectF rect = QRectF(column * iw, (row + 1) * ih, iw, ih).adjusted(3, 3, -3, -3);
+                painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+                painter.setBrush(Qt::NoBrush);
 
-                //如果是选中的日期则突出绘制背景
-                if (QDate::currentDate() == QDate(dateItem[row][column].year, dateItem[row][column].month, dateItem[row][column].day)) {
-                    painter.setPen(QPen(selectColor, 2));
-                    painter.setBrush(Qt::NoBrush);
+                for (int row = 0; row < 3; row++) {
+                    for (int column = 0; column < 4; column++) {
+                        QRectF rect = QRectF(column * iwm, row * ihm, iwm, ihm).adjusted(3, 3, -3, -3);
+                        if (rect.contains(point)) {
+                            painter.save();
+                            painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+                            painter.setPen(QPen(selectColor, 2));
+                            painter.drawRoundedRect(rect, 2, 2);
+                            painter.restore();
+                            continue;
+                        } else {
+                            painter.setPen(QPen(shadowColor, 2));
+                        }
 
-                    //如果和光晕效果重叠则边框高亮
-                    if (rect.contains(point)) {
-                        painter.setPen(QPen(selectColor.lighter(), 2));
+                        painter.drawRoundedRect(rect, 2, 2);
                     }
-
-                    //绘制圆角边框
-                    painter.drawRoundedRect(rect, 2, 2);
-
-                    //绘制里边背景
-                    painter.setPen(Qt::NoPen);
-                    painter.setBrush(selectColor);
-                    painter.drawRoundedRect(rect.adjusted(4, 4, -4, -4), 2, 2);
                 }
 
-                if (this->selectDate == QDate(dateItem[row][column].year, dateItem[row][column].month, dateItem[row][column].day)) {
+                //绘制圆形的光晕底层背景
+                painter.fillRect(0, 0, sw, sh, bgColor);
+            }
+
+
+
+            //绘制头部中文数字,先设置图像叠加模式为源在上面
+            painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            painter.setPen(textColor);
+
+            //绘制日期
+            for (int row = 0; row < 3; row++) {
+                for (int column = 0; column < 4; column++) {
+                    QRectF rect = QRectF(column * iwm, row * ihm, iwm, ihm).adjusted(3, 3, -3, -3);
+
+                    //如果是选中的日期则突出绘制背景
+                    if (QDate::currentDate().month() == monthSelect[row][column] && QDate::currentDate().year() == this->selectDate.year()) {
+                        painter.setPen(QPen(selectColor, 2));
+                        painter.setBrush(Qt::NoBrush);
+
+                        //如果和光晕效果重叠则边框高亮
+                        if (rect.contains(point)) {
+                            painter.setPen(QPen(selectColor.lighter(), 2));
+                        }
+
+                        //绘制里边背景
+                        painter.setPen(Qt::NoPen);
+                        painter.setBrush(selectColor);
+                        painter.drawRoundedRect(rect.adjusted(4, 4, -4, -4), 2, 2);
+                    }
+
+                    painter.setPen(textColor);
+                    painter.drawText(rect, Qt::AlignCenter, QString::number(monthSelect[row][column]).append("月"));
+                }
+            }
+            break;
+        }
+
+    case year_state:{
+
+        if (this->underMouse()) {
+            int effectradius = 58;
+            painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+            QRadialGradient radialGrad(point, effectradius);
+            radialGrad.setColorAt(0, QColor(0, 0, 0, 120));
+            radialGrad.setColorAt(1, QColor(0, 0, 0, 255));
+            painter.setBrush(radialGrad);
+            painter.drawEllipse(point, effectradius, effectradius);
+
+            painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+            painter.setBrush(Qt::NoBrush);
+
+            for (int row = 0; row < 3; row++) {
+                for (int column = 0; column < 3; column++) {
+                    QRectF rect = QRectF(column * iwy, row * ihy, iwy, ihy).adjusted(3, 3, -3, -3);
+                    if (rect.contains(point)) {
+                        painter.save();
+                        painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+                        painter.setPen(QPen(selectColor, 2));
+                        painter.drawRoundedRect(rect, 2, 2);
+                        painter.restore();
+                        continue;
+                    } else {
+                        painter.setPen(QPen(shadowColor, 2));
+                    }
+
+                    painter.drawRoundedRect(rect, 2, 2);
+                }
+            }
+
+            //绘制圆形的光晕底层背景
+            painter.fillRect(0, 0, sw, sh, bgColor);
+        }
+
+
+
+        //绘制头部中文数字,先设置图像叠加模式为源在上面
+        painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        painter.setPen(textColor);
+
+        //绘制日期
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 3; column++) {
+                QRectF rect = QRectF(column * iwy, row * ihy, iwy, ihy).adjusted(3, 3, -3, -3);
+
+                //如果是选中的日期则突出绘制背景
+                if (QDate::currentDate().year() == yearSelect[row][column]) {
                     painter.setPen(QPen(selectColor, 2));
                     painter.setBrush(Qt::NoBrush);
 
@@ -110,9 +280,6 @@ void MainCalendar::paintEvent(QPaintEvent *event)
                     if (rect.contains(point)) {
                         painter.setPen(QPen(selectColor.lighter(), 2));
                     }
-
-                    //绘制圆角边框
-                    //painter.drawRoundedRect(rect, 2, 2);
 
                     //绘制里边背景
                     painter.setPen(Qt::NoPen);
@@ -121,10 +288,13 @@ void MainCalendar::paintEvent(QPaintEvent *event)
                 }
 
                 painter.setPen(textColor);
-                painter.drawText(rect, Qt::AlignCenter, QString::number(dateItem[row][column].day));
+                painter.drawText(rect, Qt::AlignCenter, QString::number(yearSelect[row][column]).append("年"));
             }
         }
+        break;
     }
+    }
+
 }
 
 void MainCalendar::updateCalendar(const QDate &selectDate)
@@ -138,8 +308,8 @@ void MainCalendar::updateCalendar(const QDate &selectDate)
     }
 
     QDate today = selectDate;
-    qDebug()<<today;
     QDate theFirstDay = QDate(today.year(), today.month(), 1);
+
     int allDays = theFirstDay.daysInMonth();
     int row = 0;
     int col = 0;
@@ -203,4 +373,123 @@ void MainCalendar::setSelectDate(const QDate &selectDate)
 {
     this->selectDate = selectDate;
     updateCalendar(this->selectDate);
+}
+
+void MainCalendar::mousePressEvent(QMouseEvent *event)
+{
+    int sw = 336;
+    int sh = 336;
+    qreal scaleX = this->width() * 1.0 / sw;
+    qreal scaleY = this->height() * 1.0 / sh;
+
+    //day_state比例尺
+    qreal iw = sw / 7.0;
+    qreal ih = sh / 7.0;
+    //month_state比例尺
+    qreal iwm = sw / 4.0;
+    qreal ihm = sw / 3.0;
+    //year_state比例尺
+    qreal iwy = sw / 3.0;
+    qreal ihy = sw / 3.0;
+
+    //mask
+    switch (this->STATE) {
+    default:
+    case day_state:{
+
+        QPointF globalpoint = this->mapFromGlobal(QCursor::pos());
+        const QPointF &point = QPointF(globalpoint.x() / scaleX, globalpoint.y() / scaleY);
+
+        if(event->button() == Qt::LeftButton){
+            for (int row = 0; row < 6; row++) {
+                for (int column = 0; column < 7; column++) {
+                    QRectF rect = QRectF(column * iw, (row + 1) * ih, iw, ih).adjusted(3, 3, -3, -3);
+                    if (rect.contains(point) && dateItem[row][column].day != -1) {
+                        this->selectDate.setDate(this->selectDate.year(), this->selectDate.month(), this->dateItem[row][column].day);
+                        break;
+                    }
+                }
+            }
+        }
+        break;
+    }
+
+    case month_state:{
+
+        QPointF globalpoint = this->mapFromGlobal(QCursor::pos());
+        const QPointF &point = QPointF(globalpoint.x() / scaleX, globalpoint.y() / scaleY);
+
+        if(event->button() == Qt::LeftButton){
+            for (int row = 0; row < 3; row++) {
+                for (int column = 0; column < 4; column++) {
+                    QRectF rect = QRectF(column * iwm, row * ihm, iwm, ihm).adjusted(3, 3, -3, -3);
+                    if (rect.contains(point)) {
+                        this->selectDate.setDate(this->selectDate.year(), this->monthSelect[row][column], 1);
+                        qDebug() << this->monthSelect[row][column];
+                        break;
+                    }
+                }
+            }
+        }
+
+        updateCalendar(this->selectDate);
+        this->STATE = day_state;
+        break;
+    }
+    case year_state:{
+
+        QPointF globalpoint = this->mapFromGlobal(QCursor::pos());
+        const QPointF &point = QPointF(globalpoint.x() / scaleX, globalpoint.y() / scaleY);
+
+        if(event->button() == Qt::LeftButton){
+            for (int row = 0; row < 3; row++) {
+                for (int column = 0; column < 3; column++) {
+                    QRectF rect = QRectF(column * iwy, row * ihy, iwy, ihy).adjusted(3, 3, -3, -3);
+                    if (rect.contains(point)) {
+                        this->selectDate.setDate(this->yearSelect[row][column], this->selectDate.month(), this->selectDate.day());
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        this->STATE = month_state;
+        break;
+    }
+    }
+}
+
+void MainCalendar::setPageState()
+{
+    if(this->STATE == day_state){
+        this->STATE = month_state;
+    }
+    else if(this->STATE == month_state){
+        this->STATE = year_state;
+    }
+}
+
+QDate MainCalendar::readSelectDate()
+{
+    return this->selectDate;
+}
+
+QString MainCalendar::readPageState()
+{
+    QString page_state = "day_select";
+
+    if(this->STATE == year_state){
+        page_state.clear();
+        page_state = "year_select";
+    }
+    else if(this->STATE == month_state){
+        page_state.clear();
+        page_state = "month_select";
+    }
+    else if(this->STATE == day_state){
+        page_state.clear();
+        page_state = "day_select";
+    }
+    return page_state;
 }

@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QDate>
 #include <QPainter>
+#include <QMouseEvent>
+
 
 class MainCalendar : public QWidget
 {
@@ -16,6 +18,11 @@ class MainCalendar : public QWidget
     Q_PROPERTY(QColor selectColor READ getSelectColor WRITE setSelectColor)
 
 public:
+
+    enum page_state {year_state, month_state, day_state};
+    Q_ENUM(page_state);
+    page_state STATE = day_state;
+
     struct DateItem {
         int year;
         int month;
@@ -35,12 +42,12 @@ public:
     QColor getSelectColor()     const;
 
     void updateCalendar(const QDate &selectDate);
-
     explicit MainCalendar(QWidget *parent = nullptr);
     ~MainCalendar();
 
 protected:
     void paintEvent(QPaintEvent *);
+
 
 private:
     QColor bgColor;
@@ -49,7 +56,11 @@ private:
     QColor selectColor;
 
     QDate selectDate = QDate::currentDate();
+    QDate today = QDate::currentDate();
+
     DateItem dateItem[6][7];
+    int yearSelect[3][3];
+    int monthSelect[3][4];
 
 public Q_SLOTS:
     void setBgColor(const QColor &bgColor);
@@ -57,6 +68,11 @@ public Q_SLOTS:
     void setShadowColor(const QColor &shadowColor);
     void setSelectColor(const QColor &selectColor);
     void setSelectDate(const QDate &selectDate);
+    void setPageState();
+
+    QDate readSelectDate();
+    QString readPageState();
+    void mousePressEvent(QMouseEvent *event);
 };
 
 #endif // MAINCALENDAR_H

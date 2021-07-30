@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>KirinSchedule</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:rgb(170, 255, 255)</string>
+  </property>
   <widget class="MainCalendar" name="calendar" native="true">
    <property name="geometry">
     <rect>
@@ -23,27 +26,30 @@
     </rect>
    </property>
   </widget>
-  <widget class="QDateEdit" name="dateEdit">
+  <widget class="QPushButton" name="yearButton">
    <property name="geometry">
     <rect>
      <x>40</x>
      <y>80</y>
-     <width>110</width>
-     <height>26</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>460</x>
-     <y>80</y>
-     <width>89</width>
-     <height>25</height>
+     <width>75</width>
+     <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>OK</string>
+    <string>PushButton</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="timeButton">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>80</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PushButton</string>
    </property>
   </widget>
  </widget>
