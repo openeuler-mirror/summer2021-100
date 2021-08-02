@@ -1,16 +1,19 @@
-#include "maincalendar.h"
+#include "mainCalendar.h"
 #include <QDebug>
 #include <QMouseEvent>
 
 MainCalendar::MainCalendar(QWidget *parent):
     QWidget(parent)
 {
-    setBgColor(QColor(170, 255, 255, 255));
-    setTextColor(QColor(0, 0, 0, 255));
-    setShadowColor(QColor(0, 255, 255, 255));
-    setSelectColor(QColor(0, 255, 255, 255));
+
+    bgColor = QColor(170, 255, 255, 255);
+    textColor = QColor(0, 0, 0, 255);
+    shadowColor = QColor(0, 255, 255, 255);
+    selectColor = QColor(0, 255, 255, 255);
+
     updateCalendar(this->selectDate);
 
+    //月份更新
     for(int i = 0; i < 3 ;i++){
        for(int j = 0; j < 4;j++){
             monthSelect[i][j] = i * 4 + j + 1;
@@ -329,45 +332,6 @@ MainCalendar::~MainCalendar()
 
 }
 
-QColor MainCalendar::getBgColor() const
-{
-    return this->bgColor;
-}
-
-QColor MainCalendar::getTextColor() const
-{
-    return this->textColor;
-}
-
-QColor MainCalendar::getShadowColor() const
-{
-    return this->shadowColor;
-}
-
-QColor MainCalendar::getSelectColor() const
-{
-    return this->selectColor;
-}
-
-void MainCalendar::setBgColor(const QColor &bgColor)
-{
-    this->bgColor = bgColor;
-}
-
-void MainCalendar::setTextColor(const QColor &textColor)
-{
-    this->textColor = textColor;
-}
-
-void MainCalendar::setShadowColor(const QColor &shadowColor)
-{
-    this->shadowColor = shadowColor;
-}
-
-void MainCalendar::setSelectColor(const QColor &selectColor)
-{
-    this->selectColor = selectColor;
-}
 
 void MainCalendar::setSelectDate(const QDate &selectDate)
 {

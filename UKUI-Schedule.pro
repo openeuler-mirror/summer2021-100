@@ -1,4 +1,5 @@
-QT       += core gui
+QT       += core gui \
+            network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,15 +11,17 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    maincalendar.cpp \
-    schedule.cpp
+    mainCalendar.cpp \
+    singleApplication.cpp \
+    widget.cpp
 
 HEADERS += \
-    maincalendar.h \
-    schedule.h
+    mainCalendar.h \
+    singleApplication.h \
+    widget.h
 
 FORMS += \
-    schedule.ui
+    widget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

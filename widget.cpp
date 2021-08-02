@@ -1,9 +1,9 @@
-#include "schedule.h"
+#include "widget.h"
 #include "ui_schedule.h"
 
 #include <QDebug>
 
-schedule::schedule(QWidget *parent):
+Widget::Widget(QWidget *parent):
     QWidget(parent),
     ui(new Ui::schedule)
 {
@@ -18,26 +18,27 @@ schedule::schedule(QWidget *parent):
     ui->yearButton->setText(date);
 
     //设置定时器 20ms一刷新
-    mTimer = new QTimer(this);
-    mTimer->stop();
-    connect(mTimer, SIGNAL(timeout()), this, SLOT(on_timer_timeout()));
-    mTimer->start(20);
+    mTimerRefresh = new QTimer(this);
+    mTimerRefresh->stop();
+    connect(mTimerRefresh, SIGNAL(timeout()), this, SLOT(on_timerRefresh_timeout()));
+    mTimerRefresh->start(20);
 
 }
 
-schedule::~schedule()
+Widget::~Widget()
 {
     delete ui;
 }
 
-//刷新时间按钮
-void schedule::updateTimeButton()
+//刷新时间显示
+void Widget::updateTimeButton()
 {
     this->ui->timeButton->setText(this->time->currentTime().toString("hh:mm:ss"));
 
 }
 
-void schedule::updateYearButton()
+//刷新日期显示
+void Widget::updateYearButton()
 {
     if(this->ui->calendar->readPageState() == "month_select" || this->ui->calendar->readPageState() == "year_select"){
         this->date.clear();
@@ -56,16 +57,17 @@ void schedule::updateYearButton()
         ui->yearButton->setText(date);
     }
 }
-//定时刷新
-void schedule::on_timer_timeout()
+
+//定时器溢出处理 画面刷新 20ms
+void Widget::on_timerRefresh_timeout()
 {
     this->ui->calendar->update();
     this->updateTimeButton();
     this->updateYearButton();
 }
 
-
-void schedule::on_yearButton_clicked()
+//点击年份显示按钮
+void Widget::on_yearButton_clicked()
 {
     this->ui->calendar->setPageState();
 
