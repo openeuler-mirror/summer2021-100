@@ -12,16 +12,20 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainCalendar.cpp \
+    new_page.cpp \
     singleApplication.cpp \
     widget.cpp
 
 HEADERS += \
     mainCalendar.h \
+    new_page.h \
     singleApplication.h \
     widget.h
 
 FORMS += \
+    new_page.ui \
     widget.ui
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

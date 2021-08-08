@@ -14,7 +14,7 @@
    <string>KirinSchedule</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color:rgb(170, 255, 255)</string>
+   <string notr="true"/>
   </property>
   <widget class="MainCalendar" name="calendar" native="true">
    <property name="geometry">
@@ -52,12 +52,25 @@
     <string>PushButton</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="newButton">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>40</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>新建日程</string>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
    <class>MainCalendar</class>
    <extends>QWidget</extends>
-   <header>maincalendar.h</header>
+   <header>mainCalendar.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

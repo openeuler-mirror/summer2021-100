@@ -1,5 +1,5 @@
 #include "widget.h"
-#include "ui_schedule.h"
+#include "ui_widget.h"
 
 #include <QDebug>
 
@@ -8,6 +8,7 @@ Widget::Widget(QWidget *parent):
     ui(new Ui::schedule)
 {
     ui->setupUi(this);
+
 
     //年月按钮初始化
     this->date.append(QString::number(this->ui->calendar->readSelectDate().year()));
@@ -19,9 +20,9 @@ Widget::Widget(QWidget *parent):
 
     //设置定时器 20ms一刷新
     mTimerRefresh = new QTimer(this);
-    mTimerRefresh->stop();
-    connect(mTimerRefresh, SIGNAL(timeout()), this, SLOT(on_timerRefresh_timeout()));
     mTimerRefresh->start(20);
+    connect(mTimerRefresh, SIGNAL(timeout()), this, SLOT(widget_refresh()));
+
 
 }
 
@@ -59,7 +60,7 @@ void Widget::updateYearButton()
 }
 
 //定时器溢出处理 画面刷新 20ms
-void Widget::on_timerRefresh_timeout()
+void Widget::widget_refresh()
 {
     this->ui->calendar->update();
     this->updateTimeButton();
@@ -74,3 +75,11 @@ void Widget::on_yearButton_clicked()
     updateYearButton();
 }
 
+//点击新建按钮
+void Widget::on_newButton_clicked()
+{
+    np = new new_page;
+
+    np->setWindowModality(Qt::ApplicationModal);
+    np->show();
+}
