@@ -19,14 +19,14 @@ private:
     void createTables();
     int  getLastRowID();
     bool forceLastRowIndexValue(const int indexValue);
-    ScheduleData* getNote(QString id);
-    bool isNoteExist(ScheduleData* schedule);
-    QList<ScheduleData *> getAllNotes();
-    bool addNote(ScheduleData* schedule);
-    bool removeNote(ScheduleData* schedule);
-    bool permanantlyRemoveAllNotes();
-    bool updateNote(ScheduleData* schedule);
-    bool migrateNote(ScheduleData* schedule);
+    ScheduleData* getSchedulebyDay(QDateTime selectDateTime);
+    bool isScheduleExist(ScheduleData* schedule);
+    QList<ScheduleData *> getAllSchedules();
+    bool addSchedule(ScheduleData* schedule);
+    bool removeSchedule(ScheduleData* schedule);
+    bool permanantlyRemoveAllSchedules();
+    bool updateSchedule(ScheduleData* schedule);
+    bool migrateSchedule(ScheduleData* schedule);
     bool migrateTrash(ScheduleData* schedule);
 
 signals:
@@ -35,14 +35,14 @@ signals:
 
 public slots:
 
-    void onNotesListRequested();
+    void onSchedulesListRequested();
     void onOpenDBManagerRequested(QString path, bool doCreate);
     void onCreateUpdateRequested(ScheduleData* schedule);
-    void onDeleteNoteRequested(ScheduleData* schedule);
-    void onImportNotesRequested(QList<ScheduleData *> scheduleList);
-    void onRestoreNotesRequested(QList<ScheduleData *> scheduleList);
-    void onExportNotesRequested(QString fileName);
-    void onMigrateNotesRequested(QList<ScheduleData *> scheduleList);
+    void onDeleteScheduleRequested(ScheduleData* schedule);
+    void onImportSchedulesRequested(QList<ScheduleData *> scheduleList);
+    void onRestoreSchedulesRequested(QList<ScheduleData *> scheduleList);
+    void onExportSchedulesRequested(QString fileName);
+    void onMigrateSchedulesRequested(QList<ScheduleData *> scheduleList);
     void onMigrateTrashRequested(QList<ScheduleData *> scheduleList);
     void onForceLastRowIndexValueRequested(int index);
 };

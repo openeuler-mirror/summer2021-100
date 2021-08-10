@@ -6,22 +6,30 @@
 Widget::Widget(QWidget *parent):
     QWidget(parent),
     ui(new Ui::schedule)
+  , dateString("")
+  , date(new QDate())
+  , time(new QTime())
+  , mTimerRefresh(new QTimer(this))
+  , np(Q_NULLPTR)
+  , m_settingsDatabase(Q_NULLPTR)
+  , m_dbManager(Q_NULLPTR)
+  , m_dbThread(Q_NULLPTR)
 {
+    /** 这里应为翻译部分代码
+     *
+     *
+     *
+     *
+    **/
+
     ui->setupUi(this);
 
+    //setupDatabases();
+    kyScheduleInit();
+    //kyScheduleConn();
+    //QTimer::singleShot(200,this, SLOT(InitData()));
 
-    //年月按钮初始化
-    this->date.append(QString::number(this->ui->calendar->readSelectDate().year()));
-    this->date.append("年");
-    this->date.append(QString::number(this->ui->calendar->readSelectDate().month()));
-    this->date.append("月");
 
-    ui->yearButton->setText(date);
-
-    //设置定时器 20ms一刷新
-    mTimerRefresh = new QTimer(this);
-    mTimerRefresh->start(20);
-    connect(mTimerRefresh, SIGNAL(timeout()), this, SLOT(widget_refresh()));
 
 
 }
@@ -29,6 +37,22 @@ Widget::Widget(QWidget *parent):
 Widget::~Widget()
 {
     delete ui;
+}
+
+
+void Widget::kyScheduleInit()
+{
+    //年月按钮初始化
+    this->dateString.append(QString::number(this->ui->calendar->readSelectDate().year()));
+    this->dateString.append("年");
+    this->dateString.append(QString::number(this->ui->calendar->readSelectDate().month()));
+    this->dateString.append("月");
+
+    ui->yearButton->setText(dateString);
+
+    //设置定时器 20ms一刷新
+    mTimerRefresh->start(20);
+    connect(mTimerRefresh, SIGNAL(timeout()), this, SLOT(widget_refresh()));
 }
 
 //刷新时间显示
@@ -42,20 +66,20 @@ void Widget::updateTimeButton()
 void Widget::updateYearButton()
 {
     if(this->ui->calendar->readPageState() == "month_select" || this->ui->calendar->readPageState() == "year_select"){
-        this->date.clear();
-        this->date.append(QString::number(this->ui->calendar->readSelectDate().year()));
-        this->date.append("年");
+        this->dateString.clear();
+        this->dateString.append(QString::number(this->ui->calendar->readSelectDate().year()));
+        this->dateString.append("年");
 
-        ui->yearButton->setText(date);
+        ui->yearButton->setText(dateString);
     }
     else{
-        this->date.clear();
-        this->date.append(QString::number(this->ui->calendar->readSelectDate().year()));
-        this->date.append("年");
-        this->date.append(QString::number(this->ui->calendar->readSelectDate().month()));
-        this->date.append("月");
+        this->dateString.clear();
+        this->dateString.append(QString::number(this->ui->calendar->readSelectDate().year()));
+        this->dateString.append("年");
+        this->dateString.append(QString::number(this->ui->calendar->readSelectDate().month()));
+        this->dateString.append("月");
 
-        ui->yearButton->setText(date);
+        ui->yearButton->setText(dateString);
     }
 }
 
