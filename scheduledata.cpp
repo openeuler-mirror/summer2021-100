@@ -22,12 +22,12 @@ void ScheduleData::setId(const int &id)
 
 int ScheduleData::scheduleColor() const
 {
-    return m_notecolor;
+    return m_schedulecolor;
 }
 
-void ScheduleData::setScheduleColor(const int &notecolor)
+void ScheduleData::setScheduleColor(const int &schedulecolor)
 {
-    m_notecolor = notecolor;
+    m_schedulecolor = schedulecolor;
 }
 
 QDateTime ScheduleData::lastModificationdateTime() const
@@ -147,7 +147,7 @@ QDataStream &operator>>(QDataStream &stream, ScheduleData* &scheduleData){
     QDateTime endDateTime;
     QString content;
     QString mdContent;
-    stream >> id >> creationDateTime >> lastModificationDateTime >> content >>  startDateTime >> endDateTime >> scheduleColor >> mdContent;
+    stream >> id >> creationDateTime >> lastModificationDateTime >> content >> startDateTime >> endDateTime >> scheduleColor >> mdContent;
     scheduleData->setId(id);
     scheduleData->setLastModificationDateTime(lastModificationDateTime);
     scheduleData->setCreationDateTime(creationDateTime);

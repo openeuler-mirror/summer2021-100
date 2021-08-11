@@ -132,8 +132,8 @@ QList<ScheduleData *> DBManager::getAllSchedules()
 {
     QList<ScheduleData *> scheduleList;
 
-    QSqlQuery query(QSqlDatabase::database("note"));
-    query.prepare("SELECT * FROM active_notes");
+    QSqlQuery query(QSqlDatabase::database("schedule"));
+    query.prepare("SELECT * FROM active_schedules");
     bool status = query.exec();
     if(status){
         while(query.next()){

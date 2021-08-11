@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QDateTime>
-#include "new_page.h"
+#include <QDataStream>
 
 class ScheduleData : public QObject
 {
@@ -16,7 +16,7 @@ public:
     void setId(const int& id);
 
     int scheduleColor() const;
-    void setScheduleColor(const int &notecolor);
+    void setScheduleColor(const int &schdulecolor);
 
     QDateTime lastModificationdateTime() const;
     void setLastModificationDateTime(const QDateTime &lastModificationdateTime);
@@ -47,11 +47,10 @@ public:
 
     QDateTime deletionDateTime() const;
     void setDeletionDateTime(const QDateTime& deletionDateTime);
-    new_page *m_schedule;
 
 private:
     int m_id;
-    int m_notecolor;
+    int m_schedulecolor;
     QDateTime m_lastModificationDateTime;
     QDateTime m_creationDateTime;
     QDateTime m_deletionDateTime;
