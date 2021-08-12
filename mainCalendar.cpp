@@ -150,6 +150,26 @@ void MainCalendar::paintEvent(QPaintEvent *event)
 
                         painter.setPen(textColor);
                         painter.drawText(rect, Qt::AlignCenter, QString::number(dateItem[row][column].day));
+
+                        if(this->dateItem[row][column].daily_ScheduleList.length() != 0){
+
+                            painter.save();
+
+                            QRectF RedPoint = QRectF(column * iw + (iw*2)/3, (row + 1) * ih + ih/6, iw/6, ih/6);
+                            QFont RedPointFont;
+                            RedPointFont.setPointSize(iw/8);
+                            painter.setFont(RedPointFont);
+
+                            painter.setPen(QColor(239, 41, 41));
+                            painter.setBrush(QColor(239, 41, 41));
+
+                            painter.drawEllipse(RedPoint);
+
+                            painter.setPen(QColor(186, 189, 182));
+                            painter.drawText(RedPoint.adjusted(0, -1, 0, -1), Qt::AlignCenter, QString::number(dateItem[row][column].daily_ScheduleList.length()));
+
+                            painter.restore();
+                        }
                     }
                 }
             }
@@ -422,6 +442,7 @@ void MainCalendar::mousePressEvent(QMouseEvent *event)
         break;
     }
     }
+
 }
 
 void MainCalendar::setPageState()
@@ -456,4 +477,24 @@ QString MainCalendar::readPageState()
         page_state = "day_select";
     }
     return page_state;
+}
+
+void MainCalendar::setBgColor(const QColor &bgcolor)
+{
+    this->bgColor = bgcolor;
+}
+
+void MainCalendar::setTextColor(const QColor &textcolor)
+{
+    this->textColor = textcolor;
+}
+
+void MainCalendar::setSelectColor(const QColor &selectColor)
+{
+    this->selectColor = selectColor;
+}
+
+void MainCalendar::setShadowColor(const QColor &shadowcolor)
+{
+    this->shadowColor = shadowcolor;
 }

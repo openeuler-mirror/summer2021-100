@@ -130,6 +130,21 @@ void ScheduleData::setCreationDateTime(const QDateTime&creationDateTime)
     m_creationDateTime = creationDateTime;
 }
 
+void ScheduleData::copySchedule(ScheduleData *schedule)
+{
+    this->setId(schedule->id());
+    this->setScheduleColor(schedule->scheduleColor());
+    this->setLastModificationDateTime(schedule->lastModificationdateTime());
+    this->setCreationDateTime(schedule->creationDateTime());
+    this->setStartDateTime(schedule->startDateTime());
+    this->setEndDateTime(schedule->endDateTime());
+    this->setContent(schedule->content());
+    this->setMdContent(schedule->mdContent());
+    this->setModified(schedule->isModified());
+    this->setSelected(schedule->isSelected());
+    this->setDeletionDateTime(schedule->deletionDateTime());
+}
+
 QDataStream &operator<<(QDataStream &stream, const ScheduleData* scheduleData) {
     return stream << scheduleData->id() << scheduleData->creationDateTime() \
                   << scheduleData->lastModificationdateTime() << scheduleData->content() \

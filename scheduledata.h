@@ -48,6 +48,8 @@ public:
     QDateTime deletionDateTime() const;
     void setDeletionDateTime(const QDateTime& deletionDateTime);
 
+    void copySchedule(ScheduleData* schedule);
+
 private:
     int m_id;
     int m_schedulecolor;

@@ -73,6 +73,7 @@ private:
     void checkMigration();          //迁移sync 还没整好
     void migrateSchedule(QString notePath);
                                     //便签数据迁移 还没整好
+    void black_show();              //显示黑色模式
 
 
 
@@ -84,6 +85,8 @@ private slots:
     void on_newButton_clicked();    //点击新建按钮
     void create_update_slots(ScheduleData *schedule);
                                     //增改槽函数
+    void loadSchedules(QList<ScheduleData *> scheduleList, int scheduleCounter);
+                                    //加载日程列表
 
 signals:
 

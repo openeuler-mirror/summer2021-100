@@ -30,6 +30,7 @@ Widget::Widget(QWidget *parent):
     kyScheduleInit();
     kyScheduleConn();
     QTimer::singleShot(200,this, SLOT(InitData()));
+    black_show();
 }
 
 Widget::~Widget()
@@ -137,7 +138,7 @@ void Widget::kyScheduleConn()
     connect(this, &Widget::requestForceLastRowIndexValue,
             m_dbManager, &DBManager::onForceLastRowIndexValueRequested, Qt::BlockingQueuedConnection);
 
-    //connect(m_dbManager, &DBManager::notesReceived, this, &Widget::loadSchedules);    展示日程，，还没整好
+    connect(m_dbManager, &DBManager::notesReceived, this, &Widget::loadSchedules);
 }
 
 
@@ -199,7 +200,6 @@ void Widget::migrateSchedule(QString notePath)  //还没整好
 void Widget::updateTimeButton()
 {
     this->ui->timeButton->setText(this->time->currentTime().toString("hh:mm:ss"));
-
 }
 
 //刷新日期显示
@@ -225,8 +225,31 @@ void Widget::updateYearButton()
 
 void Widget::create_update_slots(ScheduleData *schedule)
 {
-    qDebug()<<"成功了吗？";
+
     emit requestCreateUpdateSchedule(schedule);
+}
+
+void Widget::black_show()
+{
+    QColor color;
+    this->setObjectName(QString::fromUtf8("日程管理"));
+
+    ui->widget_1->setStyleSheet("QWidget{background-color: rgb(46, 52, 54);}");
+    ui->widget_2->setStyleSheet("QWidget{background-color: rgb(46, 52, 54);}");
+
+    ui->timeButton->setStyleSheet("font-size:30px;color:rgb(186, 189, 182);border:none");
+    ui->yearButton->setStyleSheet("font-size:25px;color:rgb(186, 189, 182);border:none");
+
+    color.setRgb(46, 52, 54);
+    ui->calendar->setBgColor(color);
+    color.setRgb(186, 189, 182);
+    ui->calendar->setTextColor(color);
+    color.setRgb(255, 255, 255, 50);
+    ui->calendar->setSelectColor(color);
+    ui->calendar->setShadowColor(color);
+
+
+
 }
 
 /**
@@ -293,9 +316,26 @@ void Widget::on_newButton_clicked()
     np->show();
 }
 
-/**
- * signals
- * */
+void Widget::loadSchedules(QList<ScheduleData *> scheduleList, int scheduleCounter)
+{
+
+    m_scheduleCounter = scheduleCounter;
+    for(ScheduleData* schedule : scheduleList){
+        for(int i = 0;i < 6;i++){
+            for(int j = 0;j < 7;j++){
+                qDebug()<<this->ui->calendar->dateItem[i][j].year<<"-----"<<schedule->startDateTime().date().year();
+                qDebug()<<this->ui->calendar->dateItem[i][j].month<<"-----"<<schedule->startDateTime().date().month();
+                qDebug()<<this->ui->calendar->dateItem[i][j].day<<"-----"<<schedule->startDateTime().date().day();
+                qDebug()<<"------------------------";
+                if(this->ui->calendar->dateItem[i][j].year == schedule->startDateTime().date().year() &&
+                   this->ui->calendar->dateItem[i][j].month == schedule->startDateTime().date().month() &&
+                   this->ui->calendar->dateItem[i][j].day == schedule->startDateTime().date().day()){
+                        this->ui->calendar->dateItem[i][j].daily_ScheduleList.append(schedule);
+                }
+            }
+        }
+    }
+}
 
 
 

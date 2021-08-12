@@ -7,6 +7,8 @@
 #include <QPainter>
 #include <QMouseEvent>
 
+#include "scheduledata.h"
+
 enum page_state {year_state, month_state, day_state};
 
 class MainCalendar : public QWidget
@@ -24,6 +26,7 @@ public:
         int year;
         int month;
         int day;
+        QList<ScheduleData *> daily_ScheduleList;
 
         DateItem()
         {
@@ -34,6 +37,12 @@ public:
     };
 
     void updateCalendar(const QDate &selectDate);   //更新日历表
+    void setBgColor(const QColor &bgcolor);
+    void setTextColor(const QColor &textcolor);
+    void setShadowColor(const QColor &shadowcolor);
+    void setSelectColor(const QColor &selectColor);
+
+    DateItem dateItem[6][7];    //日期表
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -48,9 +57,10 @@ private:
     QDate selectDate = QDate::currentDate();    //选中的日期
     QDate today = QDate::currentDate();         //今天的日期
 
-    DateItem dateItem[6][7];    //日期表
     int yearSelect[3][3];       //年份表
     int monthSelect[3][4];      //月份表
+
+
 
 public slots:
     QDate readSelectDate();     //返回选中日期

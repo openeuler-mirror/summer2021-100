@@ -38,14 +38,14 @@ void new_page::on_no_Button_clicked()
 
 void new_page::onScheduleDataCreated()
 {
-    QString now_datetime = QDate::currentDate().toString("yy-MM-dd") + " " + QTime::currentTime().toString("hh-mm-ss");
-    QString start_datetime = ui->date_Edit->date().toString("yy-MM-dd") + " " + ui->time_start_Edit->time().toString("hh-mm-ss");
-    QString end_datetime = ui->date_Edit->date().toString("yy-MM-dd") + " " + ui->time_end_Edit->time().toString("hh-mm-ss");
+    QString now_datetime = QDate::currentDate().toString("yyyy-MM-dd") + " " + QTime::currentTime().toString("hh-mm-ss");
+    QString start_datetime = ui->date_Edit->date().toString("yyyy-MM-dd") + " " + ui->time_start_Edit->time().toString("hh-mm-ss");
+    QString end_datetime = ui->date_Edit->date().toString("yyyy-MM-dd") + " " + ui->time_end_Edit->time().toString("hh-mm-ss");
     this_page_data->setScheduleColor(0);
-    this_page_data->setLastModificationDateTime(QDateTime::fromString(now_datetime, "yy-MM-dd hh-mm-ss"));
-    this_page_data->setCreationDateTime(QDateTime::fromString(now_datetime, "yy-MM-dd hh-mm-ss"));
-    this_page_data->setStartDateTime(QDateTime::fromString(start_datetime, "yy-MM-dd hh-mm-ss"));
-    this_page_data->setEndDateTime(QDateTime::fromString(end_datetime, "yy-MM-dd hh-mm-ss"));
+    this_page_data->setLastModificationDateTime(QDateTime::fromString(now_datetime, "yyyy-MM-dd hh-mm-ss"));
+    this_page_data->setCreationDateTime(QDateTime::fromString(now_datetime, "yyyy-MM-dd hh-mm-ss"));
+    this_page_data->setStartDateTime(QDateTime::fromString(start_datetime, "yyyy-MM-dd hh-mm-ss"));
+    this_page_data->setEndDateTime(QDateTime::fromString(end_datetime, "yyyy-MM-dd hh-mm-ss"));
     this_page_data->setContent(ui->text_Edit->toPlainText());
     emit sendScheduleData(this_page_data);
 
