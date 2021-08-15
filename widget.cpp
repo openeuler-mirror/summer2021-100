@@ -6,6 +6,7 @@
 Widget::Widget(QWidget *parent):
     QWidget(parent),
     ui(new Ui::schedule)
+  , m_isThemeChanged(false)
   , dateString("")
   , date(new QDate())
   , time(new QTime())
@@ -48,7 +49,7 @@ void Widget::initializeSettingsDatabase()
 
     if(m_settingsDatabase->value(QStringLiteral("windowGeometry"), "NULL") == "NULL"){
         int initWidth = 590;
-        int initHeight = 630;
+        int initHeight = 678;
         QPoint center = qApp->desktop()->geometry().center();
         QRect rect(center.x() - initWidth/2, center.y() - initHeight/2, initWidth, initHeight);
         setGeometry(rect);
@@ -105,6 +106,10 @@ void Widget::kyScheduleInit()
     //设置定时器 20ms一刷新
     mTimerRefresh->start(20);
     connect(mTimerRefresh, SIGNAL(timeout()), this, SLOT(widget_refresh()));
+
+    setWindowFlags (Qt::FramelessWindowHint);
+
+    m_scheduleExitWindow = new scheduleExitWindow(this);
 }
 
 
@@ -128,6 +133,9 @@ void Widget::kyScheduleConn()
     //    connect(this, &Widget::requestExportNotes,
     //            m_dbManager, &DBManager::onExportNotesRequested, Qt::BlockingQueuedConnection);
 
+    connect(this->ui->calendar, &MainCalendar::calendarNewScheduleSignal, this, &Widget::create_update_slots);
+    connect(this->ui->calendar, &MainCalendar::calendarInitScheduleSignal, this, &Widget::InitData);
+    connect(this->ui->calendar, &MainCalendar::calendarDeleteScheduleSignal, this, &Widget::deleteSchedule);
 
 
     //connect(this, &Widget::requestMigrateSchedules,
@@ -139,6 +147,9 @@ void Widget::kyScheduleConn()
             m_dbManager, &DBManager::onForceLastRowIndexValueRequested, Qt::BlockingQueuedConnection);
 
     connect(m_dbManager, &DBManager::notesReceived, this, &Widget::loadSchedules);
+
+    connect(ui->exit_Button,SIGNAL(clicked()),this,SLOT(exitSlot()));
+    connect(ui->mini_Button,SIGNAL(clicked()),this,SLOT(miniSlot()));
 }
 
 
@@ -236,6 +247,8 @@ void Widget::black_show()
 
     ui->widget_1->setStyleSheet("QWidget{background-color: rgb(46, 52, 54);}");
     ui->widget_2->setStyleSheet("QWidget{background-color: rgb(46, 52, 54);}");
+    ui->widget_3->setStyleSheet("QWidget{background-color: rgb(46, 52, 54);}");
+
 
     ui->timeButton->setStyleSheet("font-size:30px;color:rgb(186, 189, 182);border:none");
     ui->yearButton->setStyleSheet("font-size:25px;color:rgb(186, 189, 182);border:none");
@@ -252,9 +265,42 @@ void Widget::black_show()
 
 }
 
+void Widget::mousePressEvent(QMouseEvent *event)
+{
+    m_isPressed = true;
+    m_startMovePos = event->globalPos()-this->frameGeometry().topLeft();
+}
+
+void Widget::mouseMoveEvent(QMouseEvent *event)
+{
+    if(m_isPressed)
+    {
+        move(this->mapToGlobal(event->pos() - m_startMovePos));
+
+    }
+}
+
+void Widget::mouseReleaseEvent(QMouseEvent *)
+{
+    m_isPressed = false;
+}
+
+
 /**
  * slots
  **/
+
+void Widget::miniSlot()
+{
+    this->showNormal();
+    this->showMinimized();
+}
+void Widget::exitSlot()
+{
+    m_scheduleExitWindow->setWindowModality(Qt::ApplicationModal);
+    m_scheduleExitWindow->show();
+    m_scheduleExitWindow->raise();
+}
 
 void Widget::InitData()
 {
@@ -312,30 +358,33 @@ void Widget::on_newButton_clicked()
     np->setWindowModality(Qt::ApplicationModal);
 
     connect(this->np, &new_page::sendScheduleData, this, &Widget::create_update_slots);
+    connect(this->np, &new_page::sendScheduleData, this, &Widget::InitData);
+
 
     np->show();
 }
 
-void Widget::loadSchedules(QList<ScheduleData *> scheduleList, int scheduleCounter)
+void Widget::loadSchedules(QList<ScheduleData *> scheduleList)
 {
 
-    m_scheduleCounter = scheduleCounter;
+    this->ui->calendar->initDateItem();
     for(ScheduleData* schedule : scheduleList){
         for(int i = 0;i < 6;i++){
             for(int j = 0;j < 7;j++){
-                qDebug()<<this->ui->calendar->dateItem[i][j].year<<"-----"<<schedule->startDateTime().date().year();
-                qDebug()<<this->ui->calendar->dateItem[i][j].month<<"-----"<<schedule->startDateTime().date().month();
-                qDebug()<<this->ui->calendar->dateItem[i][j].day<<"-----"<<schedule->startDateTime().date().day();
-                qDebug()<<"------------------------";
                 if(this->ui->calendar->dateItem[i][j].year == schedule->startDateTime().date().year() &&
                    this->ui->calendar->dateItem[i][j].month == schedule->startDateTime().date().month() &&
                    this->ui->calendar->dateItem[i][j].day == schedule->startDateTime().date().day()){
-                        this->ui->calendar->dateItem[i][j].daily_ScheduleList.append(schedule);
+                        if(!this->ui->calendar->dateItem[i][j].daily_ScheduleList.contains(schedule))
+                            this->ui->calendar->dateItem[i][j].daily_ScheduleList.append(schedule);
                 }
             }
         }
     }
 }
 
+void Widget::deleteSchedule(ScheduleData* schedule)
+{
+    emit requestDeleteSchedule(schedule);
+}
 
 

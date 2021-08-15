@@ -31,6 +31,23 @@ new_page::~new_page()
     delete ui;
 }
 
+void new_page::checkNewInit(QDate date)
+{
+    ui->date_Edit->setDate(date);
+    ui->date_Edit->setReadOnly(true);
+}
+
+void new_page::buddyUpdateInit(ScheduleData *schedule)
+{
+    this_page_data->setId(schedule->id());
+    ui->date_Edit->setDate(schedule->startDateTime().date());
+    ui->date_Edit->setReadOnly(true);
+
+    ui->text_Edit->setText(schedule->content());
+    qDebug()<<"SenderIn ID";
+    qDebug()<<this_page_data->id();
+}
+
 void new_page::on_no_Button_clicked()
 {
     this->close();
@@ -38,6 +55,7 @@ void new_page::on_no_Button_clicked()
 
 void new_page::onScheduleDataCreated()
 {
+    qDebug()<<"执行信号";
     QString now_datetime = QDate::currentDate().toString("yyyy-MM-dd") + " " + QTime::currentTime().toString("hh-mm-ss");
     QString start_datetime = ui->date_Edit->date().toString("yyyy-MM-dd") + " " + ui->time_start_Edit->time().toString("hh-mm-ss");
     QString end_datetime = ui->date_Edit->date().toString("yyyy-MM-dd") + " " + ui->time_end_Edit->time().toString("hh-mm-ss");
@@ -48,6 +66,14 @@ void new_page::onScheduleDataCreated()
     this_page_data->setEndDateTime(QDateTime::fromString(end_datetime, "yyyy-MM-dd hh-mm-ss"));
     this_page_data->setContent(ui->text_Edit->toPlainText());
     emit sendScheduleData(this_page_data);
-
     this->close();
+    QTimer::singleShot(200, this, SLOT(checkNeedUpdate()));
+
+    qDebug()<<"Sender ID";
+    qDebug()<<this_page_data->id();
+}
+
+void new_page::checkNeedUpdate()
+{
+    emit checkNeedUpdateSignal();
 }

@@ -2,8 +2,13 @@
 #include <QDebug>
 #include <QMouseEvent>
 
+
+
 MainCalendar::MainCalendar(QWidget *parent):
     QWidget(parent)
+    , m_isThemeChanged(false)
+    , selected_row(-1)
+    , selected_col(-1)
 {
 
     bgColor = QColor(170, 255, 255, 255);
@@ -390,6 +395,18 @@ void MainCalendar::mousePressEvent(QMouseEvent *event)
                     QRectF rect = QRectF(column * iw, (row + 1) * ih, iw, ih).adjusted(3, 3, -3, -3);
                     if (rect.contains(point) && dateItem[row][column].day != -1) {
                         this->selectDate.setDate(this->selectDate.year(), this->selectDate.month(), this->dateItem[row][column].day);
+                        mScheduleCheck = new monthScheduleCheck();
+                        mScheduleCheck->scheduleListInit(QDate(dateItem[row][column].year, dateItem[row][column].month, dateItem[row][column].day),dateItem[row][column].daily_ScheduleList);
+                        mScheduleCheck->setWindowModality(Qt::ApplicationModal);
+                        connect(this->mScheduleCheck, &monthScheduleCheck::checkNewScheduleSignal, this, &MainCalendar::calendarNewScheduleSlots);
+                        connect(this->mScheduleCheck, &monthScheduleCheck::checkInitScheduleSignal, this, &MainCalendar::calendarInitScheduleSlots);
+                        connect(this->mScheduleCheck, &monthScheduleCheck::checkDeleteScheduleSignal, this, &MainCalendar::calendarDeleteScheduleSlots);
+                        connect(this->mScheduleCheck, &monthScheduleCheck::checkUpdateScheduleSignal, this, &MainCalendar::calendarUpdateScheduleSlots);
+
+                        this->selected_row = row;
+                        this->selected_col = column;
+                        mScheduleCheck->show();
+                        mScheduleCheck->raise();
                         break;
                     }
                 }
@@ -409,7 +426,6 @@ void MainCalendar::mousePressEvent(QMouseEvent *event)
                     QRectF rect = QRectF(column * iwm, row * ihm, iwm, ihm).adjusted(3, 3, -3, -3);
                     if (rect.contains(point)) {
                         this->selectDate.setDate(this->selectDate.year(), this->monthSelect[row][column], 1);
-                        qDebug() << this->monthSelect[row][column];
                         break;
                     }
                 }
@@ -443,6 +459,26 @@ void MainCalendar::mousePressEvent(QMouseEvent *event)
     }
     }
 
+}
+
+void MainCalendar::calendarNewScheduleSlots(ScheduleData* schedule)
+{
+    emit calendarNewScheduleSignal(schedule);
+}
+
+void MainCalendar::calendarInitScheduleSlots(ScheduleData* schedule)
+{
+    emit calendarInitScheduleSignal(schedule);
+}
+
+void MainCalendar::calendarDeleteScheduleSlots(ScheduleData* schedule)
+{
+    emit calendarDeleteScheduleSignal(schedule);
+}
+
+void MainCalendar::calendarUpdateScheduleSlots()
+{
+    this->mScheduleCheck->checkUpdate(this->dateItem[selected_row][selected_col].daily_ScheduleList);
 }
 
 void MainCalendar::setPageState()
@@ -497,4 +533,13 @@ void MainCalendar::setSelectColor(const QColor &selectColor)
 void MainCalendar::setShadowColor(const QColor &shadowcolor)
 {
     this->shadowColor = shadowcolor;
+}
+
+void MainCalendar::initDateItem(void)
+{
+    for(int i = 0;i < 6;i++){
+        for(int j = 0;j < 7;j++){
+            dateItem[i][j].daily_ScheduleList.clear();
+        }
+    }
 }

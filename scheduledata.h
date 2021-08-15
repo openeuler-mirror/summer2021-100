@@ -5,6 +5,8 @@
 #include <QDateTime>
 #include <QDataStream>
 
+
+
 class ScheduleData : public QObject
 {
 Q_OBJECT

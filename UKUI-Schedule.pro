@@ -13,24 +13,35 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    customSystemTrayicon.cpp \
     dbmanager.cpp \
     main.cpp \
     mainCalendar.cpp \
+    monthScheduleCheck.cpp \
+    monthscheduleBuddy.cpp \
     new_page.cpp \
+    scheduleExitWindow.cpp \
     scheduledata.cpp \
     singleApplication.cpp \
     widget.cpp
 
 HEADERS += \
+    customSystemTrayicon.h \
     dbmanager.h \
     mainCalendar.h \
+    monthScheduleCheck.h \
+    monthscheduleBuddy.h \
     new_page.h \
+    scheduleExitWindow.h \
     scheduledata.h \
     singleApplication.h \
     widget.h
 
 FORMS += \
+    monthScheduleCheck.ui \
+    monthscheduleBuddy.ui \
     new_page.ui \
+    scheduleExitWindow.ui \
     widget.ui
 
 
@@ -40,3 +51,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES +=
+
+RESOURCES += \
+    myImage.qrc

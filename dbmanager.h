@@ -31,7 +31,7 @@ private:
 
 signals:
 
-    void notesReceived(QList<ScheduleData*> scheduleList, int scheduleCounter);
+    void notesReceived(QList<ScheduleData*> scheduleList);
 
 public slots:
 

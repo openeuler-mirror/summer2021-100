@@ -15,10 +15,12 @@
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QtConcurrent>
+#include <QMouseEvent>
 
 #include "mainCalendar.h"
 #include "new_page.h"
 #include "dbmanager.h"
+#include "scheduleExitWindow.h"
 
 namespace Ui {
     class schedule;
@@ -33,6 +35,7 @@ public:
     ~Widget();
 
     Ui::schedule *ui;               //主UI
+    bool m_isThemeChanged;          //主题色改变
 
 
 
@@ -50,16 +53,22 @@ private:
     QSettings* m_settingsDatabase;  //配置文件
     DBManager* m_dbManager;         //数据库
     QThread* m_dbThread;            //数据库线程
+    scheduleExitWindow* m_scheduleExitWindow=nullptr;
+                                    //退出弹窗
 
     int m_scheduleCounter;          //日程总数
     int m_trashCounter;             //垃圾桶总数
+
+    bool m_isPressed = false;
+    QPoint m_startMovePos;
+                                    //设置拖拽参数
 
     void kyScheduleInit();          //加载界面组件
     void kyScheduleConn();          //绑定槽函数
     void updateTimeButton();        //刷新时间显示
     void updateYearButton();        //刷新日期显示
     void createNewSchedule();       //新建日程
-    void deleteSchedule(const QModelIndex& noteIndex, bool isFromUser=true);
+    void deleteSchedule(ScheduleData* schedule);
                                     //删除日程
     void setupDatabases();          //配置数据库
     void initializeSettingsDatabase();
@@ -75,6 +84,14 @@ private:
                                     //便签数据迁移 还没整好
     void black_show();              //显示黑色模式
 
+    void mousePressEvent(QMouseEvent *event);
+
+    void mouseMoveEvent(QMouseEvent *event);
+
+    void mouseReleaseEvent(QMouseEvent *);
+                                    //设置拖拽
+
+
 
 
 
@@ -85,8 +102,11 @@ private slots:
     void on_newButton_clicked();    //点击新建按钮
     void create_update_slots(ScheduleData *schedule);
                                     //增改槽函数
-    void loadSchedules(QList<ScheduleData *> scheduleList, int scheduleCounter);
+    void loadSchedules(QList<ScheduleData *> scheduleList);
                                     //加载日程列表
+    void miniSlot();                //最小化按钮槽函数
+    void exitSlot();                //退出槽函数
+
 
 signals:
 

@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include <QDate>
 #include <QTime>
+#include <QTimer>
 
 #include "scheduledata.h"
 
@@ -20,6 +21,12 @@ public:
     explicit new_page(QWidget *parent = nullptr);
     ~new_page();
 
+    void checkNewInit(QDate date);
+
+    void buddyUpdateInit(ScheduleData* schedule);
+
+    void checkUpdateInit(ScheduleData* updateSchedule);
+
 private:
 
     Ui::new_page *ui;
@@ -32,10 +39,12 @@ private slots:
 
     void on_no_Button_clicked();
     void onScheduleDataCreated();
+    void checkNeedUpdate();
 
 signals:
 
     void sendScheduleData(ScheduleData* schedule);
+    void checkNeedUpdateSignal();
 
 };
 

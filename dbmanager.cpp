@@ -144,11 +144,12 @@ QList<ScheduleData *> DBManager::getAllSchedules()
             QDateTime dateTimeCreation = QDateTime::fromMSecsSinceEpoch(epochDateTimeCreation);
             qint64 epochDateTimeModification= query.value(2).toLongLong();
             QDateTime dateTimeModification = QDateTime::fromMSecsSinceEpoch(epochDateTimeModification);
-            QString content = query.value(4).toString();
-            qint64 epochDateTimeStart = query.value(5).toLongLong();
+
+            qint64 epochDateTimeStart = query.value(4).toLongLong();
             QDateTime dateTimeStart = QDateTime::fromMSecsSinceEpoch(epochDateTimeStart);
-            qint64 epochDateTimeEnd = query.value(6).toLongLong();
+            qint64 epochDateTimeEnd = query.value(5).toLongLong();
             QDateTime dateTimeEnd = QDateTime::fromMSecsSinceEpoch(epochDateTimeEnd);
+            QString content = query.value(6).toString();
             int schedulecolor = query.value(7).toInt();
             QString mdContent = query.value(8).toString();
 
@@ -264,7 +265,7 @@ bool DBManager::permanantlyRemoveAllSchedules()
 
 bool DBManager::updateSchedule(ScheduleData *schedule)
 {
-    QSqlQuery query(QSqlDatabase::database("note"));
+    QSqlQuery query(QSqlDatabase::database("schedule"));
     QString emptyStr;
 
     int id = schedule->id();
@@ -366,13 +367,11 @@ bool DBManager::migrateTrash(ScheduleData* schedule)
 
 void DBManager::onSchedulesListRequested()
 {
-    int noteCounter;
     QList<ScheduleData *> noteList;
 
-    noteCounter = getLastRowID();
     noteList    = getAllSchedules();
 
-    emit notesReceived(noteList, noteCounter);
+    emit notesReceived(noteList);
 }
 
 void DBManager::onOpenDBManagerRequested(QString path, bool doCreate)
