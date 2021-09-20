@@ -100,6 +100,9 @@ private slots:
     void widget_refresh();          //定时器溢出处理 画面刷新 20ms
     void on_yearButton_clicked();   //点击年份显示按钮
     void on_newButton_clicked();    //点击新建按钮
+    void on_month_Button_clicked();
+    void on_week_Button_clicked();
+    void on_schedule_Button_clicked();
     void create_update_slots(ScheduleData *schedule);
                                     //增改槽函数
     void loadSchedules(QList<ScheduleData *> scheduleList);

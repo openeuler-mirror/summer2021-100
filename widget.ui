@@ -25,23 +25,13 @@
      <height>678</height>
     </rect>
    </property>
-   <widget class="MainCalendar" name="calendar" native="true">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>160</y>
-      <width>511</width>
-      <height>500</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
      <rect>
       <x>40</x>
       <y>50</y>
       <width>511</width>
-      <height>111</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -65,35 +55,6 @@ color:rgb(186, 189, 182);
       <string>新建日程</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="yearButton">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>70</y>
-       <width>141</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>YEAR</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="timeButton">
-     <property name="geometry">
-      <rect>
-       <x>370</x>
-       <y>70</y>
-       <width>141</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string>TIME</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="month_Button">
      <property name="geometry">
       <rect>
@@ -106,6 +67,7 @@ color:rgb(186, 189, 182);
      <property name="styleSheet">
       <string notr="true">background-color:rgb(46, 52, 54);
 color:rgb(186, 189, 182);
+
 </string>
      </property>
      <property name="text">
@@ -215,7 +177,7 @@ border-radius:20px;
     <widget class="QPushButton" name="mini_Button">
      <property name="geometry">
       <rect>
-       <x>520</x>
+       <x>510</x>
        <y>0</y>
        <width>32</width>
        <height>32</height>
@@ -228,6 +190,58 @@ border-radius:20px;
       <string>-</string>
      </property>
     </widget>
+   </widget>
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>110</y>
+      <width>511</width>
+      <height>551</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="page">
+     <widget class="QPushButton" name="yearButton">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>YEAR</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="timeButton">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>0</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>TIME</string>
+      </property>
+     </widget>
+     <widget class="MainCalendar" name="calendar" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>511</width>
+        <height>500</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2"/>
    </widget>
   </widget>
  </widget>

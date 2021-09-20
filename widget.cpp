@@ -366,6 +366,19 @@ void Widget::on_newButton_clicked()
     np->show();
 }
 
+void Widget::on_month_Button_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
+void Widget::on_week_Button_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+}
+void Widget::on_schedule_Button_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
 void Widget::loadSchedules(QList<ScheduleData *> scheduleList)
 {
 
