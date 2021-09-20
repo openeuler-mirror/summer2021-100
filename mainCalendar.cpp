@@ -156,6 +156,8 @@ void MainCalendar::paintEvent(QPaintEvent *event)
                         painter.setPen(textColor);
                         painter.drawText(rect, Qt::AlignCenter, QString::number(dateItem[row][column].day));
 
+
+
                         if(this->dateItem[row][column].daily_ScheduleList.length() != 0){
 
                             painter.save();
@@ -433,6 +435,7 @@ void MainCalendar::mousePressEvent(QMouseEvent *event)
         }
 
         updateCalendar(this->selectDate);
+        dateItemUpdate();
         this->STATE = day_state;
         break;
     }
@@ -542,4 +545,22 @@ void MainCalendar::initDateItem(void)
             dateItem[i][j].daily_ScheduleList.clear();
         }
     }
+}
+
+void MainCalendar::dateItemUpdate(void)
+{
+    initDateItem();
+    for(ScheduleData* schedule : this->all_ScheduleList){
+        for(int i = 0;i < 6;i++){
+                    for(int j = 0;j < 7;j++){
+                        if(this->dateItem[i][j].year == schedule->startDateTime().date().year() &&
+                           this->dateItem[i][j].month == schedule->startDateTime().date().month() &&
+                           this->dateItem[i][j].day == schedule->startDateTime().date().day()){
+                                if(!this->dateItem[i][j].daily_ScheduleList.contains(schedule))
+                                    this->dateItem[i][j].daily_ScheduleList.append(schedule);
+                                }
+                    }
+        }
+    }
+
 }

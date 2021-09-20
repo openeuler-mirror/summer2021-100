@@ -355,7 +355,7 @@ void Widget::on_yearButton_clicked()
 void Widget::on_newButton_clicked()
 {
 
-    np = new new_page;
+    np = new new_page(this);
 
     np->setWindowModality(Qt::ApplicationModal);
 
@@ -383,8 +383,16 @@ void Widget::loadSchedules(QList<ScheduleData *> scheduleList)
 {
 
     this->ui->calendar->initDateItem();
+    this->ui->calendar->all_ScheduleList.clear();
     for(ScheduleData* schedule : scheduleList){
-        for(int i = 0;i < 6;i++){
+
+        if(!this->ui->calendar->all_ScheduleList.contains(schedule))
+            this->ui->calendar->all_ScheduleList.append(schedule);
+
+
+        this->ui->calendar->dateItemUpdate();
+
+        /*for(int i = 0;i < 6;i++){
             for(int j = 0;j < 7;j++){
                 if(this->ui->calendar->dateItem[i][j].year == schedule->startDateTime().date().year() &&
                    this->ui->calendar->dateItem[i][j].month == schedule->startDateTime().date().month() &&
@@ -393,7 +401,7 @@ void Widget::loadSchedules(QList<ScheduleData *> scheduleList)
                             this->ui->calendar->dateItem[i][j].daily_ScheduleList.append(schedule);
                 }
             }
-        }
+        }*/
     }
 }
 

@@ -13,6 +13,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    adderrorwidget.cpp \
     customSystemTrayicon.cpp \
     dbmanager.cpp \
     main.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     widget.cpp
 
 HEADERS += \
+    adderrorwidget.h \
     customSystemTrayicon.h \
     dbmanager.h \
     mainCalendar.h \
@@ -38,6 +40,7 @@ HEADERS += \
     widget.h
 
 FORMS += \
+    adderrorwidget.ui \
     monthScheduleCheck.ui \
     monthscheduleBuddy.ui \
     new_page.ui \

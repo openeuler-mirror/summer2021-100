@@ -37,6 +37,8 @@ public:
 
     page_state STATE = day_state;   //日历 年 月 日选择
 
+    QList<ScheduleData *> all_ScheduleList;
+
 
 
     void updateCalendar(const QDate &selectDate);   //更新日历表
@@ -49,6 +51,7 @@ public:
 
     DateItem dateItem[6][7];    //日期表
     bool m_isThemeChanged;          //主题色改变
+    void dateItemUpdate();
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -70,6 +73,8 @@ private:
     int monthSelect[3][4];      //月份表
 
     monthScheduleCheck* mScheduleCheck;
+
+
 
 
 
