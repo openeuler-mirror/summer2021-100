@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/myImage">
         <file>MERCY.jpeg</file>
+        <file>night_mode.svg</file>
+        <file>sun_mode.svg</file>
     </qresource>
 </RCC>

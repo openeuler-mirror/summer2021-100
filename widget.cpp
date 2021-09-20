@@ -95,6 +95,8 @@ void Widget::setupDatabases()
 
 void Widget::kyScheduleInit()
 {
+    this->ui->change_Button->setIcon(QIcon(":/myImage/night_mode.svg"));
+
     //年月按钮初始化
     this->dateString.append(QString::number(this->ui->calendar->readSelectDate().year()));
     this->dateString.append("年");
