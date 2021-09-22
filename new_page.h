@@ -7,6 +7,7 @@
 #include <QTime>
 #include <QTimer>
 #include <QMouseEvent>
+#include <QTimer>
 
 #include "scheduledata.h"
 #include "adderrorwidget.h"
@@ -33,12 +34,14 @@ public:
 
 private:
 
-    bool m_isPressed = false;
-    QPoint m_startMovePos;
-
     Ui::new_page *ui;
 
+    bool m_isPressed = false;
+    QPoint m_startMovePos;
+    QTimer* mTimerRefresh;
     ScheduleData *this_page_data;
+    QDate curDate;
+    QDate selDate;
 
     void black_show();
     void light_show();
@@ -52,11 +55,15 @@ private:
 
 
 
+
+
 private slots:
 
     void on_no_Button_clicked();
     void onScheduleDataCreated();
     void checkNeedUpdate();
+
+    void label_refresh();
 
 signals:
 

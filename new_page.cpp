@@ -27,6 +27,11 @@ new_page::new_page(QWidget *parent) :
     ui->time_start_Edit->setTime(QTime::currentTime());
     ui->time_end_Edit->setTime(QTime::currentTime().addSecs(30 * 60));
 
+    mTimerRefresh = new QTimer(this);
+
+    mTimerRefresh->start(100);
+    connect(mTimerRefresh, SIGNAL(timeout()), this, SLOT(label_refresh()));
+
 
     setWindowFlags (Qt::FramelessWindowHint);
 
@@ -154,6 +159,7 @@ void new_page::black_show()
     ui->text_Label->setStyleSheet("QLabel{color: rgb(186, 189, 182);}");
     ui->text_Edit->setStyleSheet("QTextEdit{color: rgb(186, 189, 182);}");
     ui->title->setStyleSheet("QLabel{color: rgb(186, 189, 182);}");
+    ui->label->setStyleSheet("QLabel{color: rgb(186, 189, 182);}");
 }
 
 void new_page::light_show()
@@ -179,4 +185,73 @@ void new_page::mouseMoveEvent(QMouseEvent *event)
 void new_page::mouseReleaseEvent(QMouseEvent *)
 {
     m_isPressed = false;
+}
+
+void new_page::label_refresh()
+{
+    this->curDate = QDate::currentDate();
+    this->selDate = this->ui->date_Edit->date();
+    QString labelText = "";
+    int yearDif = 0;
+    int monthDif = 0;
+    int weekDif = 0;
+    int dayDif = 0;
+    int dayofWeek = 0;
+
+    yearDif = this->curDate.year() - this->selDate.year();
+    monthDif = this->curDate.month() - this->selDate.month();
+    weekDif = this->curDate.weekNumber() - this->selDate.weekNumber();
+    dayDif = this->curDate.day() - this->selDate.day();
+    dayofWeek = this->selDate.dayOfWeek();
+
+    if(yearDif == 0 && monthDif == 0){
+        switch (weekDif) {
+            case 1: labelText.append("上周");
+                switch (dayofWeek) {
+                    case 1: labelText.append("一"); break;
+                    case 2: labelText.append("二"); break;
+                    case 3: labelText.append("三"); break;
+                    case 4: labelText.append("四"); break;
+                    case 5: labelText.append("五"); break;
+                    case 6: labelText.append("六"); break;
+                    case 7: labelText.append("日"); break;
+                }
+            break;
+            case -1: labelText.append("下周");
+                switch (dayofWeek) {
+                    case 1: labelText.append("一"); break;
+                    case 2: labelText.append("二"); break;
+                    case 3: labelText.append("三"); break;
+                    case 4: labelText.append("四"); break;
+                    case 5: labelText.append("五"); break;
+                    case 6: labelText.append("六"); break;
+                    case 7: labelText.append("日"); break;
+                }
+            break;
+            case 0:
+                switch (dayDif) {
+                    case 2: labelText.append("前天"); break;
+                    case 1: labelText.append("昨天"); break;
+                    case 0: labelText.append("今天"); break;
+                    case -1: labelText.append("明天"); break;
+                    case -2: labelText.append("后天"); break;
+                default:
+                    labelText.append("本周");
+                    switch (dayofWeek) {
+                        case 1: labelText.append("一"); break;
+                        case 2: labelText.append("二"); break;
+                        case 3: labelText.append("三"); break;
+                        case 4: labelText.append("四"); break;
+                        case 5: labelText.append("五"); break;
+                        case 6: labelText.append("六"); break;
+                        case 7: labelText.append("日"); break;
+                    }
+
+            } break;
+        }
+    }
+
+    this->ui->label->setText(labelText);
+
+
 }

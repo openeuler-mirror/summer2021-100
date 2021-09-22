@@ -24,6 +24,7 @@ SOURCES += \
     scheduleExitWindow.cpp \
     scheduledata.cpp \
     singleApplication.cpp \
+    weekcalendar.cpp \
     widget.cpp
 
 HEADERS += \
@@ -37,6 +38,7 @@ HEADERS += \
     scheduleExitWindow.h \
     scheduledata.h \
     singleApplication.h \
+    weekcalendar.h \
     widget.h
 
 FORMS += \

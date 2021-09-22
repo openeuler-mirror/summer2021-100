@@ -195,53 +195,250 @@ border-radius:20px;
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>110</y>
+      <y>150</y>
       <width>511</width>
-      <height>551</height>
+      <height>500</height>
      </rect>
     </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
     <widget class="QWidget" name="page">
-     <widget class="QPushButton" name="yearButton">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>141</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>YEAR</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="timeButton">
-      <property name="geometry">
-       <rect>
-        <x>370</x>
-        <y>0</y>
-        <width>141</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>TIME</string>
-      </property>
-     </widget>
      <widget class="MainCalendar" name="calendar" native="true">
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>50</y>
+        <y>0</y>
         <width>511</width>
         <height>500</height>
        </rect>
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page_2"/>
+    <widget class="QWidget" name="page_2">
+     <widget class="weekCalendar" name="wcalendar" native="true">
+      <property name="geometry">
+       <rect>
+        <x>49</x>
+        <y>30</y>
+        <width>462</width>
+        <height>470</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>80</y>
+        <width>49</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>00:00</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>130</y>
+        <width>49</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>03:00</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>180</y>
+        <width>49</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>06:00</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>230</y>
+        <width>49</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>09:00</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>280</y>
+        <width>49</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>12:00</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>330</y>
+        <width>49</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>15:00</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>380</y>
+        <width>49</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>18:00</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>430</y>
+        <width>49</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>21:00</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>480</y>
+        <width>49</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>24:00</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="preButton">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>0</y>
+        <width>50</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Pre</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>0</y>
+        <width>50</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>0</y>
+        <width>91</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Week</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="yearButton">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>110</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>YEAR</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="timeButton">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>110</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>TIME</string>
+    </property>
    </widget>
   </widget>
  </widget>
@@ -250,6 +447,12 @@ border-radius:20px;
    <class>MainCalendar</class>
    <extends>QWidget</extends>
    <header>mainCalendar.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>weekCalendar</class>
+   <extends>QWidget</extends>
+   <header>weekcalendar.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
