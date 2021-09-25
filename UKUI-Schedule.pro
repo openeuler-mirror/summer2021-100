@@ -30,6 +30,7 @@ SOURCES += \
 HEADERS += \
     adderrorwidget.h \
     customSystemTrayicon.h \
+    dateitem.h \
     dbmanager.h \
     mainCalendar.h \
     monthScheduleCheck.h \

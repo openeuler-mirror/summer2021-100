@@ -67,6 +67,7 @@ private:
     void kyScheduleConn();          //绑定槽函数
     void updateTimeButton();        //刷新时间显示
     void updateYearButton();        //刷新日期显示
+    void updateWeekButton();
     void createNewSchedule();       //新建日程
     void deleteSchedule(ScheduleData* schedule);
                                     //删除日程
@@ -103,6 +104,9 @@ private slots:
     void on_month_Button_clicked();
     void on_week_Button_clicked();
     void on_schedule_Button_clicked();
+    void on_weekButton_clicked();
+    void on_nextButton_clicked();
+    void on_preButton_clicked();
     void create_update_slots(ScheduleData *schedule);
                                     //增改槽函数
     void loadSchedules(QList<ScheduleData *> scheduleList);

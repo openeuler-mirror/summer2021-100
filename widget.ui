@@ -379,11 +379,16 @@ border-radius:20px;
         <height>30</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius:20px;
+
+</string>
+      </property>
       <property name="text">
-       <string>Pre</string>
+       <string/>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="nextButton">
       <property name="geometry">
        <rect>
         <x>320</x>
@@ -392,11 +397,14 @@ border-radius:20px;
         <height>30</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius:20px;</string>
+      </property>
       <property name="text">
-       <string>Next</string>
+       <string/>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="weekButton">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -404,6 +412,10 @@ border-radius:20px;
         <width>91</width>
         <height>30</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius:20px;
+</string>
       </property>
       <property name="text">
        <string>Week</string>

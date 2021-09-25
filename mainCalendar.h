@@ -9,22 +9,11 @@
 
 #include "scheduledata.h"
 #include "monthScheduleCheck.h"
+#include "dateitem.h"
 
 enum page_state {year_state, month_state, day_state};
 
-typedef struct DateItem {               //日期管理表
-    int year;
-    int month;
-    int day;
-    QList<ScheduleData *> daily_ScheduleList;
 
-    DateItem()
-    {
-        year = -1;
-        month = -1;
-        day = -1;
-    }
-}DateItem;
 
 class MainCalendar : public QWidget
 {

@@ -96,6 +96,8 @@ void Widget::setupDatabases()
 void Widget::kyScheduleInit()
 {
     this->ui->change_Button->setIcon(QIcon(":/myImage/night_mode.svg"));
+    this->ui->preButton->setIcon(QIcon(":/myImage/White_left.svg"));
+    this->ui->nextButton->setIcon(QIcon(":/myImage/White_right.svg"));
 
     //年月按钮初始化
     this->dateString.append(QString::number(this->ui->calendar->readSelectDate().year()));
@@ -112,6 +114,10 @@ void Widget::kyScheduleInit()
     setWindowFlags (Qt::FramelessWindowHint);
 
     m_scheduleExitWindow = new scheduleExitWindow(this);
+
+    this->on_month_Button_clicked();
+
+    updateWeekButton();
 }
 
 
@@ -138,6 +144,10 @@ void Widget::kyScheduleConn()
     connect(this->ui->calendar, &MainCalendar::calendarNewScheduleSignal, this, &Widget::create_update_slots);
     connect(this->ui->calendar, &MainCalendar::calendarInitScheduleSignal, this, &Widget::InitData);
     connect(this->ui->calendar, &MainCalendar::calendarDeleteScheduleSignal, this, &Widget::deleteSchedule);
+
+    connect(this->ui->wcalendar, &weekCalendar::calendarNewScheduleSignal, this, &Widget::create_update_slots);
+    connect(this->ui->wcalendar, &weekCalendar::calendarInitScheduleSignal, this, &Widget::InitData);
+    connect(this->ui->wcalendar, &weekCalendar::calendarDeleteScheduleSignal, this, &Widget::deleteSchedule);
 
 
     //connect(this, &Widget::requestMigrateSchedules,
@@ -236,6 +246,17 @@ void Widget::updateYearButton()
     }
 }
 
+void Widget::updateWeekButton()
+{
+    this->dateString.clear();
+    this->dateString.append(QString("今日"));
+    this->dateString.append(QString::number(QDateTime::currentDateTime().date().month()));
+    this->dateString.append(QString("月"));
+    this->dateString.append(QString::number(QDateTime::currentDateTime().date().day()));
+    this->dateString.append(QString("日"));
+    this->ui->weekButton->setText(this->dateString);
+}
+
 void Widget::create_update_slots(ScheduleData *schedule)
 {
 
@@ -255,13 +276,29 @@ void Widget::black_show()
     ui->timeButton->setStyleSheet("font-size:30px;color:rgb(186, 189, 182);border:none");
     ui->yearButton->setStyleSheet("font-size:25px;color:rgb(186, 189, 182);border:none");
 
+    ui->weekButton->setStyleSheet("color:rgb(186, 189, 182);border-radius:20px");
+
+    ui->label->setStyleSheet("color:rgb(186, 189, 182);");
+    ui->label_2->setStyleSheet("color:rgb(186, 189, 182);");
+    ui->label_3->setStyleSheet("color:rgb(186, 189, 182);");
+    ui->label_4->setStyleSheet("color:rgb(186, 189, 182);");
+    ui->label_5->setStyleSheet("color:rgb(186, 189, 182);");
+    ui->label_6->setStyleSheet("color:rgb(186, 189, 182);");
+    ui->label_7->setStyleSheet("color:rgb(186, 189, 182);");
+    ui->label_8->setStyleSheet("color:rgb(186, 189, 182);");
+    ui->label_9->setStyleSheet("color:rgb(186, 189, 182);");
+
     color.setRgb(46, 52, 54);
     ui->calendar->setBgColor(color);
+    ui->wcalendar->setBgColor(color);
     color.setRgb(186, 189, 182);
     ui->calendar->setTextColor(color);
+    ui->wcalendar->setTextColor(color);
     color.setRgb(255, 255, 255, 50);
     ui->calendar->setSelectColor(color);
     ui->calendar->setShadowColor(color);
+    ui->wcalendar->setSelectColor(color);
+    ui->wcalendar->setSelectColor(color);
 
 
 
@@ -339,8 +376,8 @@ void Widget::InitData()
 void Widget::widget_refresh()
 {
     this->ui->calendar->update();
+    this->ui->wcalendar->update();
     this->updateTimeButton();
-    this->updateYearButton();
 }
 
 //点击年份显示按钮
@@ -369,14 +406,40 @@ void Widget::on_newButton_clicked()
 void Widget::on_month_Button_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
+
+    this->updateYearButton();
+    this->ui->yearButton->setEnabled(true);
 }
 void Widget::on_week_Button_clicked()
 {
     ui->stackedWidget->setCurrentIndex(1);
+
+    this->dateString.clear();
+    this->dateString.append(QString::number(QDateTime::currentDateTime().date().year()));
+    this->dateString.append(QString("年"));
+    this->dateString.append(QString::number(QDateTime::currentDateTime().date().month()));
+    this->dateString.append(QString("月"));
+    this->ui->yearButton->setText(this->dateString);
+    this->ui->yearButton->setEnabled(false);
 }
 void Widget::on_schedule_Button_clicked()
 {
     ui->stackedWidget->setCurrentIndex(2);
+}
+
+void Widget::on_weekButton_clicked()
+{
+    this->ui->wcalendar->resetSelectDate(QDate::currentDate());
+}
+
+void Widget::on_preButton_clicked()
+{
+    this->ui->wcalendar->resetSelectDate(this->ui->wcalendar->readSelectDate().addDays(-7));
+}
+
+void Widget::on_nextButton_clicked()
+{
+    this->ui->wcalendar->resetSelectDate(this->ui->wcalendar->readSelectDate().addDays(7));
 }
 
 void Widget::loadSchedules(QList<ScheduleData *> scheduleList)
@@ -389,19 +452,19 @@ void Widget::loadSchedules(QList<ScheduleData *> scheduleList)
         if(!this->ui->calendar->all_ScheduleList.contains(schedule))
             this->ui->calendar->all_ScheduleList.append(schedule);
 
-
         this->ui->calendar->dateItemUpdate();
 
-        /*for(int i = 0;i < 6;i++){
-            for(int j = 0;j < 7;j++){
-                if(this->ui->calendar->dateItem[i][j].year == schedule->startDateTime().date().year() &&
-                   this->ui->calendar->dateItem[i][j].month == schedule->startDateTime().date().month() &&
-                   this->ui->calendar->dateItem[i][j].day == schedule->startDateTime().date().day()){
-                        if(!this->ui->calendar->dateItem[i][j].daily_ScheduleList.contains(schedule))
-                            this->ui->calendar->dateItem[i][j].daily_ScheduleList.append(schedule);
-                }
-            }
-        }*/
+    }
+
+    this->ui->wcalendar->initDateItem();
+    this->ui->wcalendar->all_ScheduleList.clear();
+    for(ScheduleData* schedule : scheduleList){
+
+        if(!this->ui->wcalendar->all_ScheduleList.contains(schedule))
+            this->ui->wcalendar->all_ScheduleList.append(schedule);
+
+        this->ui->wcalendar->dateItemUpdate();
+
     }
 }
 
