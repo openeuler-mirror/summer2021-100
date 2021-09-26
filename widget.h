@@ -68,6 +68,7 @@ private:
     void updateTimeButton();        //刷新时间显示
     void updateYearButton();        //刷新日期显示
     void updateWeekButton();
+    void updateLineButton();
     void createNewSchedule();       //新建日程
     void deleteSchedule(ScheduleData* schedule);
                                     //删除日程

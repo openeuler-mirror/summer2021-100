@@ -32,9 +32,12 @@ public:
 
     void checkUpdateInit(ScheduleData* updateSchedule);
 
-private:
+    void setUpdate();
 
+private:
     Ui::new_page *ui;
+
+    bool ifUpdate;
 
     bool m_isPressed = false;
     QPoint m_startMovePos;

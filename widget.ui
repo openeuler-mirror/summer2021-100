@@ -201,7 +201,7 @@ border-radius:20px;
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="MainCalendar" name="calendar" native="true">
@@ -422,6 +422,45 @@ border-radius:20px;
       </property>
      </widget>
     </widget>
+    <widget class="QWidget" name="page_3">
+     <widget class="QWidget" name="lineWidget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>-1</y>
+        <width>511</width>
+        <height>500</height>
+       </rect>
+      </property>
+      <widget class="lineCalendar" name="listWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>30</y>
+         <width>511</width>
+         <height>470</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="lineButton">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>0</y>
+         <width>91</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-radius:20px;
+</string>
+       </property>
+       <property name="text">
+        <string>Week</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
    </widget>
    <widget class="QPushButton" name="yearButton">
     <property name="geometry">
@@ -466,6 +505,11 @@ border-radius:20px;
    <extends>QWidget</extends>
    <header>weekcalendar.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>lineCalendar</class>
+   <extends>QListWidget</extends>
+   <header>linecalendar.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

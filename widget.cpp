@@ -117,7 +117,7 @@ void Widget::kyScheduleInit()
 
     this->on_month_Button_clicked();
 
-    updateWeekButton();
+
 }
 
 
@@ -148,6 +148,10 @@ void Widget::kyScheduleConn()
     connect(this->ui->wcalendar, &weekCalendar::calendarNewScheduleSignal, this, &Widget::create_update_slots);
     connect(this->ui->wcalendar, &weekCalendar::calendarInitScheduleSignal, this, &Widget::InitData);
     connect(this->ui->wcalendar, &weekCalendar::calendarDeleteScheduleSignal, this, &Widget::deleteSchedule);
+
+    connect(this->ui->listWidget, &lineCalendar::checkNewScheduleSignal, this, &Widget::create_update_slots);
+    connect(this->ui->listWidget, &lineCalendar::checkInitScheduleSignal, this, &Widget::InitData);
+    connect(this->ui->listWidget, &lineCalendar::checkDeleteScheduleSignal, this, &Widget::deleteSchedule);
 
 
     //connect(this, &Widget::requestMigrateSchedules,
@@ -255,6 +259,17 @@ void Widget::updateWeekButton()
     this->dateString.append(QString::number(QDateTime::currentDateTime().date().day()));
     this->dateString.append(QString("日"));
     this->ui->weekButton->setText(this->dateString);
+}
+
+void Widget::updateLineButton()
+{
+    this->dateString.clear();
+    this->dateString.append(QString("今日"));
+    this->dateString.append(QString::number(QDateTime::currentDateTime().date().month()));
+    this->dateString.append(QString("月"));
+    this->dateString.append(QString::number(QDateTime::currentDateTime().date().day()));
+    this->dateString.append(QString("日"));
+    this->ui->lineButton->setText(this->dateString);
 }
 
 void Widget::create_update_slots(ScheduleData *schedule)
@@ -378,6 +393,8 @@ void Widget::widget_refresh()
     this->ui->calendar->update();
     this->ui->wcalendar->update();
     this->updateTimeButton();
+    this->updateWeekButton();
+    this->updateLineButton();
 }
 
 //点击年份显示按钮
@@ -466,6 +483,16 @@ void Widget::loadSchedules(QList<ScheduleData *> scheduleList)
         this->ui->wcalendar->dateItemUpdate();
 
     }
+
+    this->ui->listWidget->all_ScheduleList.clear();
+    for(ScheduleData* schedule : scheduleList){
+
+        if(!this->ui->listWidget->all_ScheduleList.contains(schedule))
+            this->ui->listWidget->all_ScheduleList.append(schedule);
+
+    }
+
+    this->ui->listWidget->updateLineCalendar();
 }
 
 void Widget::deleteSchedule(ScheduleData* schedule)

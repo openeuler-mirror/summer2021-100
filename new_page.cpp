@@ -8,6 +8,7 @@
 new_page::new_page(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::new_page)
+    , ifUpdate(false)
     , this_page_data(Q_NULLPTR)
 {
     ui->setupUi(this);
@@ -77,6 +78,7 @@ void new_page::on_no_Button_clicked()
 void new_page::onScheduleDataCreated()
 {
 
+
     Widget *ptr = (Widget*)parentWidget();
     addErrorWidget *errorWidget = new addErrorWidget;
     errorWidget->setWindowModality(Qt::ApplicationModal);
@@ -93,26 +95,29 @@ void new_page::onScheduleDataCreated()
     this_page_data->setEndDateTime(QDateTime::fromString(end_datetime, "yyyy-MM-dd hh-mm-ss"));
     this_page_data->setContent(ui->text_Edit->toPlainText());
 
-    for(ScheduleData* schedule : ptr->ui->calendar->all_ScheduleList){
 
-        if((schedule->startDateTime() <= this_page_data->startDateTime() && this_page_data->startDateTime() < schedule->endDateTime()) ||
-           (schedule->startDateTime() < this_page_data->endDateTime() && this_page_data->endDateTime() <= schedule->endDateTime())){
-            error = 3;
-            qDebug()<<"mid";
-            errorWidget->error_level = error;
-            errorWidget->schedule->copySchedule(schedule);
-            errorWidget->update_ErrorWidget();
+    if(this->ifUpdate == false)
+    {
+        for(ScheduleData* schedule : ptr->ui->calendar->all_ScheduleList){
+            if((schedule->startDateTime() <= this_page_data->startDateTime() && this_page_data->startDateTime() < schedule->endDateTime()) ||
+               (schedule->startDateTime() < this_page_data->endDateTime() && this_page_data->endDateTime() <= schedule->endDateTime())){
+                error = 3;
+                qDebug()<<"mid";
+                errorWidget->error_level = error;
+                errorWidget->schedule->copySchedule(schedule);
+                errorWidget->update_ErrorWidget();
 
-            errorWidget->show();
-            errorWidget->raise();
+                errorWidget->show();
+                errorWidget->raise();
 
 
-            qDebug()<<"3";
+                qDebug()<<"3";
 
-            break;
+                break;
+            }
         }
-    }
 
+    }
     qDebug()<<"back";
 
 
@@ -254,4 +259,12 @@ void new_page::label_refresh()
     this->ui->label->setText(labelText);
 
 
+}
+
+void new_page::setUpdate()
+{
+    this->ifUpdate = true;
+    QString updateString;
+    updateString.append("修改日程");
+    this->ui->title->setText(updateString);
 }

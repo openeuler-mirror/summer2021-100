@@ -16,6 +16,9 @@ SOURCES += \
     adderrorwidget.cpp \
     customSystemTrayicon.cpp \
     dbmanager.cpp \
+    linecalendar.cpp \
+    lineschedulebuddy.cpp \
+    lineschedulelabel.cpp \
     main.cpp \
     mainCalendar.cpp \
     monthScheduleCheck.cpp \
@@ -32,6 +35,9 @@ HEADERS += \
     customSystemTrayicon.h \
     dateitem.h \
     dbmanager.h \
+    linecalendar.h \
+    lineschedulebuddy.h \
+    lineschedulelabel.h \
     mainCalendar.h \
     monthScheduleCheck.h \
     monthscheduleBuddy.h \
@@ -44,6 +50,8 @@ HEADERS += \
 
 FORMS += \
     adderrorwidget.ui \
+    lineschedulebuddy.ui \
+    lineschedulelabel.ui \
     monthScheduleCheck.ui \
     monthscheduleBuddy.ui \
     new_page.ui \
