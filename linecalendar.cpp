@@ -3,6 +3,7 @@
 lineCalendar::lineCalendar(QWidget *parent):
     QListWidget(parent)
     , m_isThemeChanged(false)
+    , isToday(false)
 {
 
 }
@@ -12,12 +13,18 @@ lineCalendar::~lineCalendar()
 
 }
 
+
 bool sortCalendar(const ScheduleData* schedule1, const ScheduleData* schedule2)
 {
     if(schedule1->startDateTime() < schedule2->startDateTime()){
         return true;
     }
     return false;
+}
+
+void lineCalendar::resetLineScroll()
+{
+    updateLineCalendar();
 }
 
 void lineCalendar::updateLineCalendar()
@@ -45,9 +52,10 @@ void lineCalendar::updateLineCalendar()
             this->setItemWidget(item1, newLabelBuddy);
 
             if(this->initDate == QDate::currentDate()){
-                this->setCurrentItem(item1);
+                this->isToday = true;
             }
         }
+
         QListWidgetItem *item2 = new QListWidgetItem();
         lineScheduleBuddy *newBuddy = new lineScheduleBuddy();
         newBuddy->scheduleInit(schedule);
@@ -62,6 +70,14 @@ void lineCalendar::updateLineCalendar()
         item2->setSizeHint(QSize(511, 140));
         this->addItem(item2);
         this->setItemWidget(item2, newBuddy);
+
+        if(schedule->startDateTime().date() == QDate::currentDate()){
+            this->scrollToItem(item2);
+        }
+    }
+
+    if(isToday == false){
+        this->scrollToBottom();
     }
 }
 

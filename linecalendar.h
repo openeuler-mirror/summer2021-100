@@ -26,9 +26,13 @@ public:
 
     void updateLineCalendar();
 
+    void resetLineScroll();
+
 private:
 
     QDate initDate;
+
+    bool isToday;
 
 
 private slots:

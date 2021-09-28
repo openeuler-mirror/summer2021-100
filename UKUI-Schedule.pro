@@ -68,3 +68,5 @@ DISTFILES +=
 
 RESOURCES += \
     myImage.qrc
+
+RC_ICONS = calendar.svg

@@ -11,7 +11,7 @@ scheduleExitWindow::scheduleExitWindow(Widget* page, QWidget *parent) :
     ui->setupUi(this);
     pNotebook = page;
     tray = customSystemTrayIcon::instance(page);
-    tray->setTray("Schedule", ":/myImage/MERCY.jpeg", "my_Schedule");
+    tray->setTray("日程管理", ":/myImage/calendar.svg", "日程管理已隐藏");
     QBitmap bmp(this->size());
     bmp.fill();
     QPainter p(&bmp);
@@ -23,7 +23,7 @@ scheduleExitWindow::scheduleExitWindow(Widget* page, QWidget *parent) :
 
     this->setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::FramelessWindowHint);
-    connect(pNotebook->ui->change_Button,SIGNAL(clicked()),this,SLOT(color_clicked()));
+    //connect(pNotebook->ui->change_Button,SIGNAL(clicked()),this,SLOT(color_clicked()));
     color_clicked();
 }
 scheduleExitWindow::~scheduleExitWindow()

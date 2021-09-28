@@ -36,7 +36,7 @@ private:
 
 
     //void light_show();
-    //void black_show();
+    void black_show();
 
 };
 

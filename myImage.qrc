@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="/myImage">
-        <file>MERCY.jpeg</file>
         <file>night_mode.svg</file>
         <file>sun_mode.svg</file>
         <file>Black_left.svg</file>
         <file>Black_right.svg</file>
         <file>White_left.svg</file>
         <file>White_right.svg</file>
+        <file>calendar.svg</file>
     </qresource>
 </RCC>

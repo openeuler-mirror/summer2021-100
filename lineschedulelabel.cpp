@@ -25,4 +25,5 @@ void lineScheduleLabel::initLabel(QDate date)
     dateString.append("日");
 
     this->ui->label->setText(dateString);
+    this->ui->label->setStyleSheet("color:rgb(186, 189, 182);");
 }

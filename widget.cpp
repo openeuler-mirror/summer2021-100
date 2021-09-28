@@ -95,7 +95,7 @@ void Widget::setupDatabases()
 
 void Widget::kyScheduleInit()
 {
-    this->ui->change_Button->setIcon(QIcon(":/myImage/night_mode.svg"));
+    //this->ui->change_Button->setIcon(QIcon(":/myImage/night_mode.svg"));
     this->ui->preButton->setIcon(QIcon(":/myImage/White_left.svg"));
     this->ui->nextButton->setIcon(QIcon(":/myImage/White_right.svg"));
 
@@ -115,7 +115,10 @@ void Widget::kyScheduleInit()
 
     m_scheduleExitWindow = new scheduleExitWindow(this);
 
+    setWindowIcon(QIcon(":/myImage/calendar.svg"));
+
     this->on_month_Button_clicked();
+
 
 
 }
@@ -270,6 +273,7 @@ void Widget::updateLineButton()
     this->dateString.append(QString::number(QDateTime::currentDateTime().date().day()));
     this->dateString.append(QString("日"));
     this->ui->lineButton->setText(this->dateString);
+    this->ui->lineButton->setStyleSheet("color:rgb(186, 189, 182);border-radius:20px");
 }
 
 void Widget::create_update_slots(ScheduleData *schedule)
@@ -459,6 +463,11 @@ void Widget::on_nextButton_clicked()
     this->ui->wcalendar->resetSelectDate(this->ui->wcalendar->readSelectDate().addDays(7));
 }
 
+void Widget::on_lineButton_clicked()
+{
+    this->ui->listWidget->resetLineScroll();
+}
+
 void Widget::loadSchedules(QList<ScheduleData *> scheduleList)
 {
 
@@ -499,5 +508,6 @@ void Widget::deleteSchedule(ScheduleData* schedule)
 {
     emit requestDeleteSchedule(schedule);
 }
+
 
 

@@ -10,6 +10,7 @@
 #endif
 
 #include "customSystemTrayicon.h"
+#include <qdebug.h>
 
 
 
@@ -43,7 +44,7 @@ void customSystemTrayIcon::showTray()
 {
     trayObject_->show();
     trayObject_->showMessage(trayObject_->toolTip(),trayDescribe_,
-                            QSystemTrayIcon::Information, 5000);
+                            QIcon(":/myImage/calendar.svg"), 5000);
 }
 
 void customSystemTrayIcon::hideTray()
@@ -74,7 +75,7 @@ void customSystemTrayIcon::trayActivatedEvent(
     {
     case QSystemTrayIcon::Unknown:
         trayObject_->showMessage(trayObject_->toolTip(),trayDescribe_,
-                                QSystemTrayIcon::Information, 5000);
+                                QIcon(":/myImage/calendar.svg"), 5000);
         break;
     // 右键单击
     case QSystemTrayIcon::Context:
@@ -84,6 +85,7 @@ void customSystemTrayIcon::trayActivatedEvent(
         break;
     // 双击
     case QSystemTrayIcon::DoubleClick:
+        qDebug()<<"111111";
         this->parentWidget()->showNormal();
         break;
     // 中键点击
@@ -108,11 +110,11 @@ void customSystemTrayIcon::init() {
     // 托盘对象
     trayObject_ = new QSystemTrayIcon(this);
     // 隐藏按钮（菜单）
-    hideAction_ = new QAction("隐 藏(&Z)",this);
+    hideAction_ = new QAction("隐 藏",this);
     // 还原按钮（菜单）
-    restoreAction_ = new QAction("还 原(&X)",this);
+    restoreAction_ = new QAction("还 原",this);
     // 退出按钮（菜单）
-    quitAction_ = new QAction("退 出(&C)",this);
+    quitAction_ = new QAction("退 出",this);
     // 根菜单
     menu_ = new QMenu((QWidget*)QApplication::desktop());
 
@@ -138,10 +140,9 @@ void customSystemTrayIcon::initMenu()
 
 void customSystemTrayIcon::initTray()
 {
-    //trayObject_->setIcon(QIcon(":/icon/logo"));   //设置图标图片
-    //setWindowIcon(QIcon(":/ic/logo"));  //把图片设置到窗口上
-    trayObject_->setToolTip("KySchedule");    //托盘时，鼠标放上去的提示信息
-    trayObject_->showMessage("LuYong Chen","QQ:727057301",QSystemTrayIcon::Information,10000);
+    trayObject_->setIcon(QIcon(":/myImage/calendar.svg"));   //设置图标图片
+    //setWindowIcon(QIcon(":/myImage/calendar.svg"));  //把图片设置到窗口上
+    trayObject_->setToolTip("日程管理");    //托盘时，鼠标放上去的提示信息
     // 设置托盘右键菜单
     trayObject_->setContextMenu(menu_);
     trayObject_->hide();

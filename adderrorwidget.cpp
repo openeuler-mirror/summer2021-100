@@ -20,6 +20,8 @@ addErrorWidget::addErrorWidget(QWidget *parent) :
     p.drawRoundedRect(bmp.rect(),6,6);
     setMask(bmp);
 
+    black_show();
+
     this->setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::FramelessWindowHint);
 }
@@ -66,4 +68,33 @@ void addErrorWidget::update_ErrorWidget()
         this->ui->errorText->setText(QString("此日程与已有日程冲突:"));
         this->ui->errorInfo->setText(infoText);
     }
+}
+
+void addErrorWidget::black_show()
+{
+    ui->widget->setStyleSheet("QWidget{background-color: rgba(46, 52, 54, 0.4);}");
+
+    ui->errorText->setStyleSheet("background-color: rgba();\
+                             font-size:20px;\
+                                font-weight:400;\
+                                color:rgba(255,255,255,1);\
+                                line-height:34px;\
+                                opacity:0.97;\
+                                 ");
+    ui->errorInfo->setStyleSheet("background-color: rgba();\
+                             font-size:10px;\
+                                font-weight:400;\
+                                color:rgba(255,255,255,1);\
+                                line-height:34px;\
+                                opacity:0.97;\
+                                 ");
+    ui->title->setStyleSheet("background-color: rgba();\
+                             font-size:15px;\
+                                font-weight:400;\
+                                color:rgba(255,255,255,1);\
+                                line-height:34px;\
+                                opacity:0.97;\
+                                 ");
+     ui->pushButton->setStyleSheet(QString::fromUtf8("color:rgba(255,255,255,1);\n"
+                                                      "line-height:24px;"));
 }

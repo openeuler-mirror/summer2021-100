@@ -108,6 +108,7 @@ private slots:
     void on_weekButton_clicked();
     void on_nextButton_clicked();
     void on_preButton_clicked();
+    void on_lineButton_clicked();
     void create_update_slots(ScheduleData *schedule);
                                     //增改槽函数
     void loadSchedules(QList<ScheduleData *> scheduleList);

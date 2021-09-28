@@ -32,7 +32,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Are you sure to exit the schedule?</string>
+     <string>确定要退出日程管理？</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBox">
@@ -45,7 +45,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Hide</string>
+     <string>隐藏到后台</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
@@ -58,7 +58,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Yes</string>
+     <string>是</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
@@ -71,7 +71,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>No</string>
+     <string>否</string>
     </property>
    </widget>
   </widget>

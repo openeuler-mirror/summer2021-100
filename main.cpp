@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
     if(!a.isRunning()){
         Widget w;
         a.w = &w;
+        w.setWindowTitle("日程管理");
         w.show();
         return a.exec();
     }
